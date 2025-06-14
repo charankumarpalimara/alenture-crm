@@ -10,46 +10,59 @@ import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 // import PieChart from "../../components/PieChart";
 import StatBox from "../../components/StatBox";
 // import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getCrmId } from "../../config";
 
-const Dashboard = ({apiUrl}) => {
+const Dashboard = ({ apiUrl }) => {
   // const theme = useTheme();
   // const colors = tokens(theme.palette.mode); // Get theme colors
-
-
 
   const [allExperienceCount, setAllExperienceCount] = useState(0);
   const [newExperienceCount, setNewExperienceCount] = useState(0);
   const [resolvedExperienceCount, setResolvedExperienceCount] = useState(0);
   const [pendingExperienceCount, setPendingExperienceCount] = useState(0);
 
-
   const fetchAllCounts = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getAllExperiencesCountByCrmId/${getCrmId()}`);
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/v1/getAllExperiencesCountByCrmId/${getCrmId()}`
+      );
       const data = await response.json();
       setAllExperienceCount(data.count || 0);
     } catch {
       setAllExperienceCount(0);
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getNewExperiencesCountByCrmId/${getCrmId()}`);
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/v1/getNewExperiencesCountByCrmId/${getCrmId()}`
+      );
       const data = await response.json();
       setNewExperienceCount(data.count || 0);
     } catch {
       setNewExperienceCount(0);
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getResolvedExperiencesCountByCrmId/${getCrmId()}`);
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/v1/getResolvedExperiencesCountByCrmId/${getCrmId()}`
+      );
       const data = await response.json();
       setResolvedExperienceCount(data.count || 0);
     } catch {
       setResolvedExperienceCount(0);
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getPendingExperiencesCountByCrmId/${getCrmId()}`);
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_API_URL
+        }/v1/getPendingExperiencesCountByCrmId/${getCrmId()}`
+      );
       const data = await response.json();
       setPendingExperienceCount(data.count || 0);
     } catch {
@@ -72,42 +85,46 @@ const Dashboard = ({apiUrl}) => {
     };
   }, []);
 
-  
-
-
   const data = [
     {
       title: `${allExperienceCount}`,
       subtitle: "ALL EXPERIENCE",
       progress: allExperienceCount > 0 ? 1 : 0,
       icon: <ReceiptLongIcon />,
-      link: "/allExperiences",
+      link: "/crm/allExperiences",
     },
     {
       title: `${newExperienceCount}`,
       subtitle: "NEW EXPERIENCE",
-      progress: allExperienceCount > 0 ? newExperienceCount / allExperienceCount : 0,
+      progress:
+        allExperienceCount > 0 ? newExperienceCount / allExperienceCount : 0,
       icon: <NewReleasesIcon />,
-      link: "/newExperiences",
+      link: "/crm/newExperiences",
     },
     {
       title: `${resolvedExperienceCount}`,
       subtitle: "RESOLVED EXPERIENCE",
-      progress: allExperienceCount > 0 ? resolvedExperienceCount / allExperienceCount : 0,
+      progress:
+        allExperienceCount > 0
+          ? resolvedExperienceCount / allExperienceCount
+          : 0,
       icon: <CheckCircleIcon />,
-      link: "/resolvedExperiences",
+      link: "/crm/resolvedExperiences",
     },
     {
       title: `${pendingExperienceCount}`,
       subtitle: "PENDING EXPERIENCE",
-      progress: allExperienceCount > 0 ? pendingExperienceCount / allExperienceCount : 0,
+      progress:
+        allExperienceCount > 0
+          ? pendingExperienceCount / allExperienceCount
+          : 0,
       icon: <HourglassEmptyIcon />,
-      link: "/pendingExperiences",
+      link: "/crm/pendingExperiences",
     },
   ];
 
   return (
-    <Box m={2} >
+    <Box m={2}>
       {/* HEADER */}
       {/* <Box mb={3} p={2} borderRadius={2} sx={{ backgroundColor:"#ffffff" }}>
         <Grid container justifyContent="space-between" alignItems="center" >
@@ -142,7 +159,7 @@ const Dashboard = ({apiUrl}) => {
                 p={2}
                 borderRadius={2}
                 sx={{
-                  bgcolor: '#ffffff',
+                  bgcolor: "#ffffff",
                   minHeight: "80px",
                   display: "flex",
                   flexDirection: "column",
@@ -154,14 +171,13 @@ const Dashboard = ({apiUrl}) => {
                 }}
               >
                 <StatBox
-                        subtitle={item.subtitle}
+                  subtitle={item.subtitle}
                   title={item.title}
-          
-                  color='#3e4396'
+                  color="#3e4396"
                   progress={item.progress}
                   icon={React.cloneElement(item.icon, {
                     fontSize: "large",
-                    sx: { color: '#3e4396' },
+                    sx: { color: "#3e4396" },
                   })}
                 />
               </Box>
@@ -202,13 +218,11 @@ const Dashboard = ({apiUrl}) => {
         </Grid> */}
 
         <Grid item xs={12} md={4}>
-          <Box p={2} borderRadius={2} sx={{bgcolor:"#ffffff" }} >
-            <Typography variant="h6"  mb={1} fontWeight="bold">
+          <Box p={2} borderRadius={2} sx={{ bgcolor: "#ffffff" }}>
+            <Typography variant="h6" mb={1} fontWeight="bold">
               Experience Quantity
             </Typography>
-            <Box height="250px"   >
-              {/* <PieChart isDashboard={true} /> */}
-            </Box>
+            <Box height="250px">{/* <PieChart isDashboard={true} /> */}</Box>
           </Box>
         </Grid>
       </Grid>

@@ -1,12 +1,24 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Form, Input, Select, Button, Row, Col, Avatar, Modal, Typography, message, Spin } from 'antd';
-import { CameraOutlined } from '@ant-design/icons';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import { Country } from 'country-state-city';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Row,
+  Col,
+  Avatar,
+  Modal,
+  Typography,
+  message,
+  Spin,
+} from "antd";
+import { CameraOutlined } from "@ant-design/icons";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { Country } from "country-state-city";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { apiUrl } from '../../config';\
-import { getCrmId, getCrmName, getCreaterRole } from '../../config';
+import { getCrmId, getCrmName, getCreaterRole } from "../../config";
 
 const { Text } = Typography;
 
@@ -16,7 +28,7 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   const cropX = (mediaWidth - cropWidth) / 2;
   const cropY = (mediaHeight - cropHeight) / 2;
   return {
-    unit: '%',
+    unit: "%",
     x: (cropX / mediaWidth) * 100,
     y: (cropY / mediaHeight) * 100,
     width: (cropWidth / mediaWidth) * 100,
@@ -27,7 +39,7 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
 const CmDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [originalImage, setOriginalImage] = useState(null);
   const [crop, setCrop] = useState();
@@ -50,27 +62,31 @@ const [isLoading, setIsLoading] = useState(false);
     }
   }, [ticket]);
 
-  const initialValues = useMemo(() => ({
-    id: ticket.cmid || '',
-firstName: ticket.firstname ,
-lastName: ticket.lastname ,
-    // firstName: ticket.firstName || '',
-    // lastName: ticket.lastName || '',
-    email: ticket.email || '',
-    PhoneNo: ticket.mobile || '',
-    phoneCode: ticket.phonecode || '',
-    crmid: ticket.crmid || '',
-    crmname: ticket.crmname || '',
-    customerManager: ticket.customerManager || '',
-    organization: ticket.organization || '',
-    gender: ticket.gender || '',
-    status: ticket.status || '',
-    organizationid: ticket.organizationid || '',
-    organizationname: ticket.organizationname || '',
-    customerrelationshipmanagername: ticket.customerrelationshipmanagername || '',
-    branch: ticket.branch || '',
-    imageUrl: ticket.imageUrl || '',
-  }), [ticket]);
+  const initialValues = useMemo(
+    () => ({
+      id: ticket.cmid || "",
+      firstName: ticket.firstname,
+      lastName: ticket.lastname,
+      // firstName: ticket.firstName || '',
+      // lastName: ticket.lastName || '',
+      email: ticket.email || "",
+      PhoneNo: ticket.mobile || "",
+      phoneCode: ticket.phonecode || "",
+      crmid: ticket.crmid || "",
+      crmname: ticket.crmname || "",
+      customerManager: ticket.customerManager || "",
+      organization: ticket.organization || "",
+      gender: ticket.gender || "",
+      status: ticket.status || "",
+      organizationid: ticket.organizationid || "",
+      organizationname: ticket.organizationname || "",
+      customerrelationshipmanagername:
+        ticket.customerrelationshipmanagername || "",
+      branch: ticket.branch || "",
+      imageUrl: ticket.imageUrl || "",
+    }),
+    [ticket]
+  );
 
   const [form] = Form.useForm();
 
@@ -120,55 +136,55 @@ lastName: ticket.lastname ,
     // Build FormData for multipart/form-data
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('cmid', values.id);
-    formData.append('firstName', values.firstName );
-    formData.append('lastName', values.lastName );
-    formData.append('email', values.email );
-    formData.append('phoneCode', values.phoneCode);
-    formData.append('PhoneNo', values.PhoneNo );
-      //  const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails"));
-        const crmid =  getCrmId() ;
-        const crmname = getCrmName() ;
-    formData.append('crmid', crmid );
-    formData.append('crmname', crmname );
-    formData.append('organizationid', values.organizationid || '');
-    formData.append('organizationname', values.organization || values.organizationname);
-    formData.append('branch', values.branch );
-    formData.append('gender', values.gender );
-    formData.append('status', values.status );
-    formData.append('password', ticket.Passwords); // Assuming password is not editable
+    formData.append("cmid", values.id);
+    formData.append("firstName", values.firstName);
+    formData.append("lastName", values.lastName);
+    formData.append("email", values.email);
+    formData.append("phoneCode", values.phoneCode);
+    formData.append("PhoneNo", values.PhoneNo);
+    //  const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails"));
+    const crmid = getCrmId();
+    const crmname = getCrmName();
+    formData.append("crmid", crmid);
+    formData.append("crmname", crmname);
+    formData.append("organizationid", values.organizationid || "");
+    formData.append(
+      "organizationname",
+      values.organization || values.organizationname
+    );
+    formData.append("branch", values.branch);
+    formData.append("gender", values.gender);
+    formData.append("status", values.status);
+    formData.append("password", ticket.Passwords); // Assuming password is not editable
     // formData.append('password', values.password || '');
     // formData.append('createrrole', createrrole);
     // formData.append('createrid', createrid);
 
     console.log("Form Data:", {
-      cmid: values.id || ticket.id || '',
-      firstname: values.firstName || '',
-      lastname: values.lastName || '',
-      email: values.email || '',
-      phoneCode: values.phoneCode || '',
-      mobile: values.PhoneNo || '',
-      crmid: values.crmid || '',
-      crmname: values.crmname || values.customerrelationshipmanagername || '',
-      organizationname: values.organization || values.organizationname || '',
-      branch: values.branch || '',
+      cmid: values.id || ticket.id || "",
+      firstname: values.firstName || "",
+      lastname: values.lastName || "",
+      email: values.email || "",
+      phoneCode: values.phoneCode || "",
+      mobile: values.PhoneNo || "",
+      crmid: values.crmid || "",
+      crmname: values.crmname || values.customerrelationshipmanagername || "",
+      organizationname: values.organization || values.organizationname || "",
+      branch: values.branch || "",
     });
 
-
-      // const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails")); // replace with your actual key
-      const createrrole = getCreaterRole();
-      const createrid =  getCrmId();
+    // const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails")); // replace with your actual key
+    const createrrole = getCreaterRole();
+    const createrid = getCrmId();
     formData.append("createrrole", createrrole);
-    formData.append("createrid", createrid)
+    formData.append("createrid", createrid);
 
-
-    console.log()
-
+    console.log();
 
     // Add profile image if present
     if (profileImage) {
       // Convert base64 to Blob
-      const arr = profileImage.split(',');
+      const arr = profileImage.split(",");
       const mime = arr[0].match(/:(.*?);/)[1];
       const bstr = atob(arr[1]);
       let n = bstr.length;
@@ -177,30 +193,32 @@ lastName: ticket.lastname ,
         u8arr[n] = bstr.charCodeAt(n);
       }
       const file = new Blob([u8arr], { type: mime });
-      formData.append('cmProfileImageByAdminHob', file, 'profile.jpg');
+      formData.append("cmProfileImageByAdminHob", file, "profile.jpg");
     }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/updateCmProfileByAdminHob`, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/v1/updateCmProfileByAdminHob`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await response.json();
       if (response.ok) {
-        message.success('Customer Manager details updated successfully');
+        message.success("Customer Manager details updated successfully");
         // alert('Customer Manager details updated successfully');
         setIsLoading(false);
         setIsEditing(false);
-        Navigate('/cm'); // Redirect to the list page after successful update
-
+        Navigate("/crm/cm"); // Redirect to the list page after successful update
       } else {
         // alert('Update failed: ' + (data?.error || response.statusText));
-        message.error('Update failed: ' + (data?.error || response.statusText));
+        message.error("Update failed: " + (data?.error || response.statusText));
         setIsEditing(false);
       }
     } catch (error) {
       // alert('Error submitting form');
-        message.error('Error submitting form');
-         setIsEditing(false);
+      message.error("Error submitting form");
+      setIsEditing(false);
     }
   };
 
@@ -234,12 +252,12 @@ lastName: ticket.lastname ,
   const handleCropImage = async () => {
     if (!completedCrop || !imgRef.current) return;
     const image = imgRef.current;
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
     canvas.width = completedCrop.width;
     canvas.height = completedCrop.height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.drawImage(
       image,
@@ -253,15 +271,19 @@ lastName: ticket.lastname ,
       completedCrop.height
     );
     return new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setProfileImage(reader.result);
-          resolve(reader.result);
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/jpeg', 0.9); 
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return;
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setProfileImage(reader.result);
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(blob);
+        },
+        "image/jpeg",
+        0.9
+      );
     });
   };
 
@@ -275,99 +297,126 @@ lastName: ticket.lastname ,
   };
 
   const countries = Country.getAllCountries();
-  const gender = ['Male', 'Female'];
-  const status = ['Suspend', 'Active'];
+  const gender = ["Male", "Female"];
+  const status = ["Suspend", "Active"];
 
   return (
     <>
-              {isLoading && (
-                <div style={{
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  zIndex: 1000,
-                  color: '#fff',
-                  fontSize: '20px',
-                }}>
-                  <Spin size="large" fullscreen  />
-                  {/* <div style={{ position: 'absolute', top: '60%', width: '100%', textAlign: 'center', color: '#fff', fontSize: 18 }}>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+            color: "#fff",
+            fontSize: "20px",
+          }}
+        >
+          <Spin size="large" fullscreen />
+          {/* <div style={{ position: 'absolute', top: '60%', width: '100%', textAlign: 'center', color: '#fff', fontSize: 18 }}>
                     Loading... Please wait while we process your request.
                   </div> */}
-                </div>
-              )}
-    <div style={{ background: '#fff', borderRadius: 8, padding: 24, margin: 16, boxShadow: '2px 2px 8px rgba(0,0,0,0.08)' }}>
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={initialValues}
-        onFinish={handleFormSubmit}
+        </div>
+      )}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 8,
+          padding: 24,
+          margin: 16,
+          boxShadow: "2px 2px 8px rgba(0,0,0,0.08)",
+        }}
       >
-        {/* Profile Image Section */}
-        <Row justify="center" style={{ marginBottom: 24 }}>
-          <Col>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <Avatar
-                src={   profileImage  ||   ticket.imageUrl  || 'https://via.placeholder.com/150'}
-                size={120}
-                style={{ border: '2px solid #1677ff', cursor: isEditing ? 'pointer' : 'default', opacity: isEditing ? 1 : 0.8, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
-                onClick={triggerFileInput}
-              />
-              <Button
-                icon={<CameraOutlined />}
-                shape="circle"
-                style={{ position: 'absolute', bottom: 0, right: 0, background: '#1677ff', color: '#fff', border: 'none', opacity: isEditing ? 1 : 0.7 }}
-                onClick={triggerFileInput}
-                disabled={!isEditing}
-              />
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                style={{ display: 'none' }}
-                disabled={!isEditing}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Modal
-          open={cropModalVisible}
-          title="Crop Profile Picture"
-          onCancel={() => setCropModalVisible(false)}
-          onOk={handleSaveCroppedImage}
-          okText="Save Photo"
-          cancelText="Cancel"
-          width={400}
-          bodyStyle={{ height: 350 }}
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={initialValues}
+          onFinish={handleFormSubmit}
         >
-          {originalImage && (
-            <ReactCrop
-              crop={crop}
-              onChange={(c) => setCrop(c)}
-              onComplete={handleCropComplete}
-              aspect={1}
-              circularCrop
-            >
-              <img
-                ref={imgRef}
-                src={originalImage}
-                onLoad={onImageLoad}
-                style={{ maxHeight: '70vh', maxWidth: '100%' }}
-                alt="Crop preview"
-              />
-            </ReactCrop>
-          )}
-        </Modal>
-        {/* Main Form Fields */}
-        <Row gutter={24}>
-          {/* CRM ID Dropdown */}
-          {/* <Col xs={24} md={8}>
+          {/* Profile Image Section */}
+          <Row justify="center" style={{ marginBottom: 24 }}>
+            <Col>
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <Avatar
+                  src={
+                    profileImage ||
+                    ticket.imageUrl ||
+                    "https://via.placeholder.com/150"
+                  }
+                  size={120}
+                  style={{
+                    border: "2px solid #1677ff",
+                    cursor: isEditing ? "pointer" : "default",
+                    opacity: isEditing ? 1 : 0.8,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  }}
+                  onClick={triggerFileInput}
+                />
+                <Button
+                  icon={<CameraOutlined />}
+                  shape="circle"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    background: "#1677ff",
+                    color: "#fff",
+                    border: "none",
+                    opacity: isEditing ? 1 : 0.7,
+                  }}
+                  onClick={triggerFileInput}
+                  disabled={!isEditing}
+                />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  disabled={!isEditing}
+                />
+              </div>
+            </Col>
+          </Row>
+          <Modal
+            open={cropModalVisible}
+            title="Crop Profile Picture"
+            onCancel={() => setCropModalVisible(false)}
+            onOk={handleSaveCroppedImage}
+            okText="Save Photo"
+            cancelText="Cancel"
+            width={400}
+            bodyStyle={{ height: 350 }}
+          >
+            {originalImage && (
+              <ReactCrop
+                crop={crop}
+                onChange={(c) => setCrop(c)}
+                onComplete={handleCropComplete}
+                aspect={1}
+                circularCrop
+              >
+                <img
+                  ref={imgRef}
+                  src={originalImage}
+                  onLoad={onImageLoad}
+                  style={{ maxHeight: "70vh", maxWidth: "100%" }}
+                  alt="Crop preview"
+                />
+              </ReactCrop>
+            )}
+          </Modal>
+          {/* Main Form Fields */}
+          <Row gutter={24}>
+            {/* CRM ID Dropdown */}
+            {/* <Col xs={24} md={8}>
             <Form.Item
               label={<Text strong>CRM ID</Text>}
               name="crmid"
@@ -399,165 +448,227 @@ lastName: ticket.lastname ,
             </Form.Item>
           </Col> */}
 
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>ID</Text>}
-              name="id"
-              rules={[{ required: true, message: 'Id is required' }]}
-            >
-              <Input placeholder="First Name" disabled={true} size="large" />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>First Name</Text>}
-              name="firstName"
-              rules={[{ required: true, message: 'First name is required' }]}
-            >
-              <Input placeholder="First Name" disabled={!isEditing} size="large" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Last Name</Text>}
-              name="lastName"
-              rules={[{ required: true, message: 'Last name is required' }]}
-            >
-              <Input placeholder="Last Name" disabled={!isEditing} size="large" />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Organization Id</Text>}
-              name="organizationid"
-              rules={[{ required: true, message: 'Organization Id is required' }]}
-            >
-              <Input placeholder="Organization Id" disabled={true} size="large" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Organization Name</Text>}
-              name="organizationname"
-              rules={[{ required: true, message: 'Organization name is required' }]}
-            >
-              <Input placeholder="Organization Name" disabled={true} size="large" />
-            </Form.Item>
-          </Col>
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>ID</Text>}
+                name="id"
+                rules={[{ required: true, message: "Id is required" }]}
+              >
+                <Input placeholder="First Name" disabled={true} size="large" />
+              </Form.Item>
+            </Col>
 
             <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Branch Name</Text>}
-              name="branch"
-              rules={[{ required: true, message: 'Branch name is required' }]}
-            >
-              <Input placeholder="Branch Name" disabled={true} size="large" />
-            </Form.Item>
-          </Col>
+              <Form.Item
+                label={<Text strong>First Name</Text>}
+                name="firstName"
+                rules={[{ required: true, message: "First name is required" }]}
+              >
+                <Input
+                  placeholder="First Name"
+                  disabled={!isEditing}
+                  size="large"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Last Name</Text>}
+                name="lastName"
+                rules={[{ required: true, message: "Last name is required" }]}
+              >
+                <Input
+                  placeholder="Last Name"
+                  disabled={!isEditing}
+                  size="large"
+                />
+              </Form.Item>
+            </Col>
 
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Organization Id</Text>}
+                name="organizationid"
+                rules={[
+                  { required: true, message: "Organization Id is required" },
+                ]}
+              >
+                <Input
+                  placeholder="Organization Id"
+                  disabled={true}
+                  size="large"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Organization Name</Text>}
+                name="organizationname"
+                rules={[
+                  { required: true, message: "Organization name is required" },
+                ]}
+              >
+                <Input
+                  placeholder="Organization Name"
+                  disabled={true}
+                  size="large"
+                />
+              </Form.Item>
+            </Col>
 
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Email Id</Text>}
-              name="email"
-              rules={[{ required: true, type: 'email', message: 'Valid email is required' }]}
-            >
-              <Input placeholder="Email" disabled={!isEditing} size="large" />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Phone Number</Text>}
-              required
-            >
-              <Input.Group compact>
-                <Form.Item
-                  name="phoneCode"
-                  noStyle
-                  rules={[{ required: true, message: 'Code' }]}
-                >
-                  <Select
-                    showSearch
-                    style={{ width: 160 }}
-                    placeholder="Code"
-                    optionFilterProp="children"
-                    disabled={!isEditing}
-                    size="large"
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Branch Name</Text>}
+                name="branch"
+                rules={[{ required: true, message: "Branch name is required" }]}
+              >
+                <Input placeholder="Branch Name" disabled={true} size="large" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Email Id</Text>}
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    type: "email",
+                    message: "Valid email is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Email" disabled={!isEditing} size="large" />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={8}>
+              <Form.Item label={<Text strong>Phone Number</Text>} required>
+                <Input.Group compact>
+                  <Form.Item
+                    name="phoneCode"
+                    noStyle
+                    rules={[{ required: true, message: "Code" }]}
                   >
-                    {countries.map((c) => (
-                      <Select.Option key={c.isoCode} value={`+${c.phonecode}`}>{`+${c.phonecode} (${c.name})`}</Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="PhoneNo"
-                  noStyle
-                  rules={[
-                    { required: true, message: 'Phone number is required' },
-                    { pattern: /^[0-9]+$/, message: 'Only numbers allowed' },
-                    { min: 10, message: 'At least 10 digits' },
-                  ]}
+                    <Select
+                      showSearch
+                      style={{ width: 160 }}
+                      placeholder="Code"
+                      optionFilterProp="children"
+                      disabled={!isEditing}
+                      size="large"
+                    >
+                      {countries.map((c) => (
+                        <Select.Option
+                          key={c.isoCode}
+                          value={`+${c.phonecode}`}
+                        >{`+${c.phonecode} (${c.name})`}</Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item
+                    name="PhoneNo"
+                    noStyle
+                    rules={[
+                      { required: true, message: "Phone number is required" },
+                      { pattern: /^[0-9]+$/, message: "Only numbers allowed" },
+                      { min: 10, message: "At least 10 digits" },
+                    ]}
+                  >
+                    <Input
+                      style={{ width: "calc(100% - 160px)" }}
+                      placeholder="Phone Number"
+                      disabled={!isEditing}
+                      size="large"
+                    />
+                  </Form.Item>
+                </Input.Group>
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Gender</Text>}
+                name="gender"
+                rules={[{ required: true, message: "Gender is required" }]}
+              >
+                <Select
+                  placeholder="Select Gender"
+                  disabled={!isEditing}
+                  size="large"
                 >
-                  <Input style={{ width: 'calc(100% - 160px)' }} placeholder="Phone Number" disabled={!isEditing} size="large" />
-                </Form.Item>
-              </Input.Group>
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Gender</Text>}
-              name="gender"
-              rules={[{ required: true, message: 'Gender is required' }]}
-            >
-              <Select placeholder="Select Gender" disabled={!isEditing} size="large">
-                {gender.map((g) => (
-                  <Select.Option key={g} value={g}>{g}</Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={<Text strong>Status</Text>}
-              name="status"
-              rules={[{ required: true, message: 'Status is required' }]}
-            >
-              <Select placeholder="Select Status" disabled={!isEditing} size="large">
-                {status.map((s) => (
-                  <Select.Option key={s} value={s}>{s}</Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-   
+                  {gender.map((g) => (
+                    <Select.Option key={g} value={g}>
+                      {g}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={8}>
+              <Form.Item
+                label={<Text strong>Status</Text>}
+                name="status"
+                rules={[{ required: true, message: "Status is required" }]}
+              >
+                <Select
+                  placeholder="Select Status"
+                  disabled={!isEditing}
+                  size="large"
+                >
+                  {status.map((s) => (
+                    <Select.Option key={s} value={s}>
+                      {s}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          {/* Form Actions moved outside the Form to keep buttons always enabled */}
+        </Form>
+        <Row justify="end" style={{ marginTop: 32 }} gutter={16}>
+          {!isEditing ? (
+            <Col>
+              <Button
+                type="primary"
+                style={{
+                  background: "#3e4396",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  borderRadius: 8,
+                }}
+                size="large"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+            </Col>
+          ) : (
+            <>
+              <Col>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  style={{
+                    background: "#3e4396",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    borderRadius: 8,
+                  }}
+                  onClick={() => form.submit()}
+                >
+                  Save
+                </Button>
+              </Col>
+              <Col>
+                <Button size="large" danger onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </Col>
+            </>
+          )}
         </Row>
-        {/* Form Actions moved outside the Form to keep buttons always enabled */}
-      </Form>
-      <Row justify="end" style={{ marginTop: 32 }} gutter={16}>
-        {!isEditing ? (
-          <Col>
-            <Button type="primary" style={{ background: '#3e4396', color: '#fff', fontWeight: 'bold', borderRadius: 8 }} size="large" onClick={() => setIsEditing(true)}>
-              Edit
-            </Button>
-          </Col>
-        ) : (
-          <>
-            <Col>
-              <Button type="primary" htmlType="submit" size="large" style={{ background: '#3e4396', color: '#fff', fontWeight: 'bold', borderRadius: 8 }} onClick={() => form.submit()}>
-                Save
-              </Button>
-            </Col>
-            <Col>
-              <Button size="large" danger onClick={handleCancel}>
-                Cancel
-              </Button>
-            </Col>
-          </>
-        )}
-      </Row>
-    </div>
+      </div>
     </>
   );
 };

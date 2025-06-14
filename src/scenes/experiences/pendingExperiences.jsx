@@ -25,16 +25,57 @@ import { getCrmId } from "../../config";
 
 // Columns for DataGrid
 const columns = [
-  { field: "experienceid", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false, minWidth: 100 },
-  { field: "subject", headerName: "Subject", flex: 2, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
-  { field: "priority", headerName: "Priority", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
-  { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
-  { field: "date", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
-  { field: "time", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  {
+    field: "experienceid",
+    headerName: "ID",
+    flex: 0.4,
+    headerClassName: "bold-header",
+    disableColumnMenu: false,
+    minWidth: 100,
+  },
+  {
+    field: "subject",
+    headerName: "Subject",
+    flex: 2,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 200,
+  },
+  {
+    field: "priority",
+    headerName: "Priority",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
+  {
+    field: "date",
+    headerName: "Created",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
+  {
+    field: "time",
+    headerName: "Updated",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
 ];
 
-
-const PendingExperiences = ({apiUrl}) => {
+const PendingExperiences = ({ apiUrl }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -45,13 +86,20 @@ const PendingExperiences = ({apiUrl}) => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  const [selectedFilters, setSelectedFilters] = useState({ priority: [], status: [] });
+  const [selectedFilters, setSelectedFilters] = useState({
+    priority: [],
+    status: [],
+  });
 
   // Fetch from API on mount
   React.useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getPendingTicketsbyCrmid/${getCrmId()}`);
+        const response = await fetch(
+          `${
+            process.env.REACT_APP_API_URL
+          }/v1/getPendingTicketsbyCrmid/${getCrmId()}`
+        );
         const data = await response.json();
         if (response.ok && Array.isArray(data.experienceDetails)) {
           const transformedData = data.experienceDetails.map((item, idx) => ({
@@ -88,7 +136,7 @@ const PendingExperiences = ({apiUrl}) => {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.type === 'notification' && data.crmid === getCrmId) {
+        if (data.type === "notification" && data.crmid === getCrmId) {
           fetchTickets();
         }
       } catch (e) {}
@@ -129,10 +177,14 @@ const PendingExperiences = ({apiUrl}) => {
       );
     }
     if (filters.priority.length) {
-      filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
+      filtered = filtered.filter((ticket) =>
+        filters.priority.includes(ticket.priority)
+      );
     }
     if (filters.status.length) {
-      filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
+      filtered = filtered.filter((ticket) =>
+        filters.status.includes(ticket.status)
+      );
     }
     setFilteredTickets(filtered);
   };
@@ -141,19 +193,38 @@ const PendingExperiences = ({apiUrl}) => {
   //   Navigate('/crmform')
   // };
   // Get Unique Values for Filters
-  const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
+  const getUniqueValues = (key) => [
+    ...new Set(tickets.map((ticket) => ticket[key])),
+  ];
 
   const handleRowClick = (params) => {
-    Navigate('/ticketdetails', { state: { ticket: params.row } });
+    Navigate("/crm/ticketdetails", { state: { ticket: params.row } });
   };
 
   return (
     <Box m="10px">
       {/* Toolbar */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2} flexDirection={isMobile ? "column" : "row"}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={2}
+        mb={2}
+        flexDirection={isMobile ? "column" : "row"}
+      >
         {/* Search Bar */}
-        <Box display="flex" backgroundColor="#ffffff" borderRadius="3px" flex={1}>
-          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" value={searchTerm} onChange={handleSearchChange} />
+        <Box
+          display="flex"
+          backgroundColor="#ffffff"
+          borderRadius="3px"
+          flex={1}
+        >
+          <InputBase
+            sx={{ ml: 2, flex: 1 }}
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <IconButton type="button" sx={{ p: 1 }}>
             <SearchIcon />
           </IconButton>
@@ -166,7 +237,7 @@ const PendingExperiences = ({apiUrl}) => {
             color: "#ffffff",
             whiteSpace: "nowrap",
             fontWeight: "bold",
-            textTransform: "none"
+            textTransform: "none",
           }}
           variant="contained"
           startIcon={<ImportExportIcon />}
@@ -182,7 +253,7 @@ const PendingExperiences = ({apiUrl}) => {
             color: "#ffffff",
             whiteSpace: "nowrap",
             fontWeight: "bold",
-            textTransform: "none"
+            textTransform: "none",
           }}
           variant="contained"
           startIcon={<FilterIcon />}
@@ -192,13 +263,22 @@ const PendingExperiences = ({apiUrl}) => {
         </Button>
 
         {/* Filter Menu */}
-        <Menu anchorEl={filterAnchorEl} open={Boolean(filterAnchorEl)} onClose={handleFilterClose}>
+        <Menu
+          anchorEl={filterAnchorEl}
+          open={Boolean(filterAnchorEl)}
+          onClose={handleFilterClose}
+        >
           <Box p={2}>
             <Typography variant="h6">Priority</Typography>
             {getUniqueValues("priority").map((priority) => (
               <MenuItem key={priority}>
                 <FormControlLabel
-                  control={<Checkbox checked={selectedFilters.priority.includes(priority)} onChange={() => handleFilterSelect("priority", priority)} />}
+                  control={
+                    <Checkbox
+                      checked={selectedFilters.priority.includes(priority)}
+                      onChange={() => handleFilterSelect("priority", priority)}
+                    />
+                  }
                   label={priority}
                 />
               </MenuItem>
@@ -211,7 +291,12 @@ const PendingExperiences = ({apiUrl}) => {
               <MenuItem key={status}>
                 <FormControlLabel
                   sx={{ backgroundColor: "#ffffff" }}
-                  control={<Checkbox checked={selectedFilters.status.includes(status)} onChange={() => handleFilterSelect("status", status)} />}
+                  control={
+                    <Checkbox
+                      checked={selectedFilters.status.includes(status)}
+                      onChange={() => handleFilterSelect("status", status)}
+                    />
+                  }
                   label={status}
                 />
               </MenuItem>
@@ -238,7 +323,8 @@ const PendingExperiences = ({apiUrl}) => {
       </Box>
 
       {/* DataGrid */}
-      <Box height="70vh"
+      <Box
+        height="70vh"
         m="13px 0 0 0"
         sx={{
           // overflowX: "hidden",
@@ -283,7 +369,6 @@ const PendingExperiences = ({apiUrl}) => {
           },
           "& .MuiDataGrid-root": {
             // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
-       
           },
           "& .MuiDataGrid-virtualScroller": {
             // scrollbarWidth: "none !important",
@@ -293,7 +378,7 @@ const PendingExperiences = ({apiUrl}) => {
             borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
             "&:hover": {
               cursor: "pointer",
-               backgroundColor:"#D9EAFD"
+              backgroundColor: "#D9EAFD",
             },
           },
           "& .MuiTablePagination-root": {
@@ -313,76 +398,76 @@ const PendingExperiences = ({apiUrl}) => {
             backgroundColor: colors.blueAccent[700],
             color: "#ffffff",
           },
-        }}>
+        }}
+      >
         <DataGrid
-        sx={{
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-            fontSize: "16px",
-            whiteSpace: "nowrap", // Prevent text wrapping
-            overflow: "visible", // Prevent text truncation
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none", // Remove the border below the header
-            fontWeight: "bold !important",
-            fontSize: "16px !important",
-            color: "#ffffff",
-          },
-          // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
-          //    width: "2px !important",
-          //    height: "6px !important"
-          //  },
-          "& .MuiDataGrid-columnSeparator": {
-            display: "none", // Hide the column separator
-          },
-          // "& .MuiDataGrid-root::-webkit-scrollbar": {
-          //   display: "none", // Hides scrollbar in Chrome, Safari
-          // },
-          "& .MuiDataGrid-columnHeaderTitle": {
-            fontWeight: "bold !important", // Ensure header text is bold
-          },
-          // "& .MuiDataGrid-virtualScroller": {
-          //   backgroundColor: "#ffffff",
-          // },
-          "& .MuiDataGrid-root::-webkit-scrollbar": {
-            display: "none !important",
-          },
-          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-            display: "none !important",
-          },
-          "& .MuiDataGrid-root": {
-            // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
-       
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            // scrollbarWidth: "none !important",
-            backgroundColor: "#ffffff",
-          },
-          "& .MuiDataGrid-row": {
-            borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
-            "&:hover": {
-              cursor: "pointer",
-               backgroundColor:"#D9EAFD"
+          sx={{
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+              fontSize: "16px",
+              whiteSpace: "nowrap", // Prevent text wrapping
+              overflow: "visible", // Prevent text truncation
             },
-          },
-          "& .MuiTablePagination-root": {
-            color: "#ffffff !important", // Ensure pagination text is white
-          },
-          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input": {
-            color: "#ffffff !important", // Ensure select label and input text are white
-          },
-          "& .MuiTablePagination-displayedRows": {
-            color: "#ffffff !important", // Ensure displayed rows text is white
-          },
-          "& .MuiSvgIcon-root": {
-            color: "#ffffff !important", // Ensure pagination icons are white
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-            color: "#ffffff",
-          },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none", // Remove the border below the header
+              fontWeight: "bold !important",
+              fontSize: "16px !important",
+              color: "#ffffff",
+            },
+            // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
+            //    width: "2px !important",
+            //    height: "6px !important"
+            //  },
+            "& .MuiDataGrid-columnSeparator": {
+              display: "none", // Hide the column separator
+            },
+            // "& .MuiDataGrid-root::-webkit-scrollbar": {
+            //   display: "none", // Hides scrollbar in Chrome, Safari
+            // },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              fontWeight: "bold !important", // Ensure header text is bold
+            },
+            // "& .MuiDataGrid-virtualScroller": {
+            //   backgroundColor: "#ffffff",
+            // },
+            "& .MuiDataGrid-root::-webkit-scrollbar": {
+              display: "none !important",
+            },
+            "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+              display: "none !important",
+            },
+            "& .MuiDataGrid-root": {
+              // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              // scrollbarWidth: "none !important",
+              backgroundColor: "#ffffff",
+            },
+            "& .MuiDataGrid-row": {
+              borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor: "#D9EAFD",
+              },
+            },
+            "& .MuiTablePagination-root": {
+              color: "#ffffff !important", // Ensure pagination text is white
+            },
+            "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input": {
+              color: "#ffffff !important", // Ensure select label and input text are white
+            },
+            "& .MuiTablePagination-displayedRows": {
+              color: "#ffffff !important", // Ensure displayed rows text is white
+            },
+            "& .MuiSvgIcon-root": {
+              color: "#ffffff !important", // Ensure pagination icons are white
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+              color: "#ffffff",
+            },
           }}
           rows={filteredTickets}
           columns={columns}

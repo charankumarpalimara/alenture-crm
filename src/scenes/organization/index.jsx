@@ -29,10 +29,38 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 const columns = [
-  { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false, minWidth: 100 },
-  { field: "name", headerName: "Organization", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
-  { field: "mobile", headerName: "Phone", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
-  { field: "district", headerName: "City", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  {
+    field: "id",
+    headerName: "ID",
+    flex: 0.4,
+    headerClassName: "bold-header",
+    disableColumnMenu: false,
+    minWidth: 100,
+  },
+  {
+    field: "name",
+    headerName: "Organization",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 200,
+  },
+  {
+    field: "mobile",
+    headerName: "Phone",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
+  {
+    field: "district",
+    headerName: "City",
+    flex: 1,
+    headerClassName: "bold-header",
+    disableColumnMenu: true,
+    minWidth: 150,
+  },
   // { field: "branchtype", headerName: "Branch Type", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
 ];
 
@@ -45,32 +73,35 @@ const Organization = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-const handleSearchChange = (event) => {
-  const searchValue = event.target.value.toLowerCase();
-  setSearchTerm(searchValue);
+  const handleSearchChange = (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    setSearchTerm(searchValue);
 
-  if (searchValue === "") {
-    setFilteredTickets(originalTickets); // Reset to original data when search is cleared
-  } else {
-    const filtered = originalTickets.filter(ticket =>
-      (ticket.id || "").toLowerCase().includes(searchValue) ||
-      (ticket.name || "").toLowerCase().includes(searchValue) ||
-      (ticket.city || "").toLowerCase().includes(searchValue) ||
-      (ticket.mobile || "").toLowerCase().includes(searchValue)
-    );
-    setFilteredTickets(filtered);
-  }
-};
+    if (searchValue === "") {
+      setFilteredTickets(originalTickets); // Reset to original data when search is cleared
+    } else {
+      const filtered = originalTickets.filter(
+        (ticket) =>
+          (ticket.id || "").toLowerCase().includes(searchValue) ||
+          (ticket.name || "").toLowerCase().includes(searchValue) ||
+          (ticket.city || "").toLowerCase().includes(searchValue) ||
+          (ticket.mobile || "").toLowerCase().includes(searchValue)
+      );
+      setFilteredTickets(filtered);
+    }
+  };
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getAllOrgs`);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/v1/getAllOrgs`
+        );
         const data = await response.json();
         console.log("API Response:", data);
         if (response.ok) {
           if (Array.isArray(data.data)) {
-            const transformedData = data.data.map(item => ({
+            const transformedData = data.data.map((item) => ({
               id: item.organizationid || "N/A",
               name: item.organizationname || "N/A",
               phonenocode: item.phonecode || "N/A",
@@ -143,14 +174,31 @@ const handleSearchChange = (event) => {
   // };
 
   const handleRowClick = (params) => {
-    Navigate('/organizationdetails', { state: { ticket: params.row } });
+    Navigate("/crm/organizationdetails", { state: { ticket: params.row } });
   };
 
   return (
     <Box m="10px">
-      <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2} flexDirection={isMobile ? "column" : "row"}>
-        <Box display="flex" backgroundColor="#ffffff" borderRadius="3px" flex={1}>
-          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" value={searchTerm} onChange={handleSearchChange} />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={2}
+        mb={2}
+        flexDirection={isMobile ? "column" : "row"}
+      >
+        <Box
+          display="flex"
+          backgroundColor="#ffffff"
+          borderRadius="3px"
+          flex={1}
+        >
+          <InputBase
+            sx={{ ml: 2, flex: 1 }}
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <IconButton type="button" sx={{ p: 1 }}>
             <SearchIcon />
           </IconButton>
@@ -170,7 +218,8 @@ const handleSearchChange = (event) => {
           Create New
         </Button> */}
       </Box>
-      <Box height="70vh"
+      <Box
+        height="70vh"
         m="13px 0 0 0"
         sx={{
           "& .MuiDataGrid-cell": {
@@ -205,14 +254,14 @@ const handleSearchChange = (event) => {
             scrollbarWidth: "none !important",
             "&:hover": {
               cursor: "pointer",
-              backgroundColor: "#D9EAFD"
+              backgroundColor: "#D9EAFD",
             },
           },
           "& .MuiDataGrid-row": {
-            borderBottom: `0.5px solid ${colors.grey['300']}`,
+            borderBottom: `0.5px solid ${colors.grey["300"]}`,
             "&:hover": {
               cursor: "pointer",
-              backgroundColor: "#D9EAFD"
+              backgroundColor: "#D9EAFD",
             },
           },
           "& .MuiTablePagination-root": {
@@ -232,7 +281,8 @@ const handleSearchChange = (event) => {
             backgroundColor: colors.blueAccent[700],
             color: "#ffffff",
           },
-        }}>
+        }}
+      >
         <DataGrid
           sx={{
             "& .MuiDataGrid-cell": {
@@ -263,17 +313,17 @@ const handleSearchChange = (event) => {
             "& .MuiDataGrid-root": {
               "&:hover": {
                 cursor: "pointer",
-                backgroundColor: "#D9EAFD"
+                backgroundColor: "#D9EAFD",
               },
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: "#ffffff",
             },
             "& .MuiDataGrid-row": {
-              borderBottom: `0.5px solid ${colors.grey['300']}`,
+              borderBottom: `0.5px solid ${colors.grey["300"]}`,
               "&:hover": {
                 cursor: "pointer",
-                backgroundColor: "#D9EAFD"
+                backgroundColor: "#D9EAFD",
               },
             },
             "& .MuiTablePagination-root": {

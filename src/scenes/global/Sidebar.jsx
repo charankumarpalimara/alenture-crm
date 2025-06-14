@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, useTheme, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Box,
+  useTheme,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -14,17 +22,13 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import logoLight from "./logo.png";
 import { useNavigate } from "react-router-dom";
 
-
-
-
-
 // Shared getActivePage function
 const getActivePage = (pathname) => {
   if (pathname.includes("/notes")) {
     return "/notes";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
-  }else if (
+  } else if (
     pathname.includes("/allExperiences") ||
     pathname.includes("/ticketdetails") ||
     pathname.includes("/profile") ||
@@ -34,32 +38,24 @@ const getActivePage = (pathname) => {
     pathname.includes("/taskdetails")
   ) {
     return "/"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
+  } else if (
     pathname.includes("/cmform") ||
     pathname.includes("/cmdetails") ||
     pathname.includes("/cm")
-
-  )
-   {
+  ) {
     return "/cm"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
+  } else if (
     pathname.includes("/tasks") ||
     pathname.includes("/taskform") ||
     pathname.includes("/taskdetails")
-
-  )
-   {
+  ) {
     return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
+  } else if (
     pathname.includes("/organization") ||
     pathname.includes("/organizationdetails")
-
   ) {
     return "/organization"; // Ensure this matches the `to` prop of the Experiences Item
-  }  else {
+  } else {
     return pathname;
   }
 };
@@ -95,7 +91,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       <ListItemText
         primary={title}
         sx={{
-          "& .MuiTypography-root": { // Target the nested Typography component
+          "& .MuiTypography-root": {
+            // Target the nested Typography component
             fontWeight: "bold !important", // Ensure text is bold for selected item
             fontSize: "13px",
           },
@@ -109,7 +106,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = ({ isSidebar, onLogout }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   // const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
   const [selected, setSelected] = useState(getActivePage(location.pathname));
@@ -121,14 +118,11 @@ const Sidebar = ({ isSidebar, onLogout }) => {
 
   const logoSrc = logoLight;
 
-
-
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem("token");
     onLogout(); // Call the logout function from props
     // window.location.reload(); // Reload the page to reset the state
-    navigate('/login'); // Navigate to login page
-
+    navigate("/crm/login"); // Navigate to login page
   };
 
   return (
@@ -155,42 +149,73 @@ const Sidebar = ({ isSidebar, onLogout }) => {
           paddingBottom: 1,
         }}
       >
-        <img src={logoSrc} alt="logo" style={{ width: "100%", cursor: "pointer" }} />
+        <img
+          src={logoSrc}
+          alt="logo"
+          style={{ width: "100%", cursor: "pointer" }}
+        />
       </Box>
 
       {/* Menu Items */}
       <List sx={{ padding: "20px" }}>
-        <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        <Item title="Customer Manager" to="/cm" icon={<WorkOutlineOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item
+          title="Dashboard"
+          to="/crm"
+          icon={<HomeOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Item
+          title="Customer Manager"
+          to="/crm/cm"
+          icon={<WorkOutlineOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Item
+          title="Organization"
+          to="/crm/organization"
+          icon={<BusinessOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
         {/* <Item title="Tasks" to="/tasks" icon={<TaskOutlinedIcon />} selected={selected} setSelected={setSelected} /> */}
-        <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-   <ListItem
-                    button
-                    onClick={handleLogout}
-                    sx={{
-                      color: colors.blueAccent[500],
-                      borderRadius: "10px",
-                      marginBottom: "8px",
-
-                    }}
-                  >
-                    <ListItemIcon sx={{ color: "inherit" }}>
-                      <LogoutOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Logout"
-
-                      sx={{
-                        "& .MuiTypography-root": {
-                          fontWeight: "bold !important", // Ensure text is bold for selected item
-                          fontSize: "13px",
-                
-                        },
-                      }}
-                    />
-                  </ListItem>
+        <Item
+          title="Notes"
+          to="/crm/notes"
+          icon={<DescriptionOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Item
+          title="Calendar"
+          to="/crm/calendar"
+          icon={<CalendarTodayOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <ListItem
+          button
+          onClick={handleLogout}
+          sx={{
+            color: colors.blueAccent[500],
+            borderRadius: "10px",
+            marginBottom: "8px",
+          }}
+        >
+          <ListItemIcon sx={{ color: "inherit" }}>
+            <LogoutOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="Logout"
+            sx={{
+              "& .MuiTypography-root": {
+                fontWeight: "bold !important", // Ensure text is bold for selected item
+                fontSize: "13px",
+              },
+            }}
+          />
+        </ListItem>
       </List>
     </Drawer>
   );

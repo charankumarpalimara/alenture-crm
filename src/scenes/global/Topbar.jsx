@@ -1,4 +1,17 @@
-import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop, ListItem, List, ListItemIcon, ListItemText, Drawer } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  useTheme,
+  Typography,
+  useMediaQuery,
+  Modal,
+  Backdrop,
+  ListItem,
+  List,
+  ListItemIcon,
+  ListItemText,
+  Drawer,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
@@ -11,16 +24,16 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 // import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 // import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 // import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import logoLight from "./logo.png";
 import { useNavigate } from "react-router-dom";
-import Badge from '@mui/material/Badge';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Badge from "@mui/material/Badge";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { getCrmId, getCrmName } from "../../config";
 
 // Shared getActivePage function
@@ -39,18 +52,15 @@ const getActivePage = (pathname) => {
     pathname.includes("/resolvedExperiences")
   ) {
     return "/"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
+  } else if (
     pathname.includes("/cmform") ||
     pathname.includes("/cmdetails") ||
     pathname.includes("/cm")
   ) {
     return "/cm"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
+  } else if (
     pathname.includes("/organization") ||
     pathname.includes("/organizationdetails")
-
   ) {
     return "/organization"; // Ensure this matches the `to` prop of the Experiences Item
   }
@@ -67,7 +77,6 @@ const getActivePage = (pathname) => {
     pathname.includes("/tasks") ||
     pathname.includes("/taskform") ||
     pathname.includes("/taskdetails")
-
   ) {
     return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
   } else {
@@ -106,7 +115,8 @@ const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
       <ListItemText
         primary={title}
         sx={{
-          "& .MuiTypography-root": { // Target the nested Typography component
+          "& .MuiTypography-root": {
+            // Target the nested Typography component
             fontWeight: "bold !important", // Ensure text is bold for selected item
             fontSize: "15px",
           },
@@ -116,7 +126,7 @@ const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
   );
 };
 
-const Topbar = ({onLogout}) => {
+const Topbar = ({ onLogout }) => {
   // const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {}; // Use correct key for CRM
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -130,18 +140,18 @@ const Topbar = ({onLogout}) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState('');
+  const [snackbarMsg, setSnackbarMsg] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // WebSocket connection for live notifications
   useEffect(() => {
-  // const WS_URL = "ws://147.182.163.213:3000/ws/";
+    // const WS_URL = "ws://147.182.163.213:3000/ws/";
     const ws = new WebSocket(process.env.REACT_APP_WS_URL);
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log('WebSocket data:', data); // Debug incoming messages
-        if (data.type === 'notification' && data.crmid === getCrmId()) {
+        console.log("WebSocket data:", data); // Debug incoming messages
+        if (data.type === "notification" && data.crmid === getCrmId()) {
           setNotifications((prev) => [data, ...prev]);
           setUnreadCount((prev) => prev + 1);
           setSnackbarMsg(data.message);
@@ -176,7 +186,6 @@ const Topbar = ({onLogout}) => {
   //     </Box>
   //   </Modal>
   // );
-
 
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -228,55 +237,81 @@ const Topbar = ({onLogout}) => {
   };
   const getPageTitle1 = () => {
     switch (location.pathname) {
-      case "/":
-        return { primaryTitle: "Dashboard", secondaryTitle: null };
-      case "/cm":
-        return { primaryTitle: "Customer Manager", secondaryTitle: null };
-      case "/cmdetails":
-        return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };
       case "/crm":
+        return { primaryTitle: "Dashboard", secondaryTitle: null };
+      case "/crm/cm":
+        return { primaryTitle: "Customer Manager", secondaryTitle: null };
+      case "/crm/cmdetails":
+        return {
+          primaryTitle: "Customer Manager Details ",
+          secondaryTitle: null,
+        };
+      case "/crm/crm":
         return { primaryTitle: "Experiences", secondaryTitle: null };
-      case "/hob":
+      case "/crm/hob":
         return { primaryTitle: "Head of The Business", secondaryTitle: null };
-      case "/organization":
+      case "/crm/organization":
         return { primaryTitle: "Organizations", secondaryTitle: null };
-      case "/organizationdetails":
+      case "/crm/organizationdetails":
         return { primaryTitle: "Organization Details", secondaryTitle: null };
-      case "/ticketdetails":
+      case "/crm/ticketdetails":
         return { primaryTitle: "Experience Details", secondaryTitle: null };
-      case "/tasks":
+      case "/crm/tasks":
         return { primaryTitle: "Tasks List", secondaryTitle: null };
-      case "/taskform":
-        return { primaryTitle: "Tasks List", secondaryTitle: "Create a New Task" };
-      case "/taskdetails":
+      case "/crm/taskform":
+        return {
+          primaryTitle: "Tasks List",
+          secondaryTitle: "Create a New Task",
+        };
+      case "/crm/taskdetails":
         return { primaryTitle: "Task Details", secondaryTitle: null };
       // case "/cmdetails":
-      //   return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };       
-      case "/cmform":
-        return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
-      case "/crmform":
-        return { primaryTitle: "Experiences", secondaryTitle: "Allot New Experience" };
-      case "/form":
-        return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
-      case "/allExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
-      case "/newExperiences":
-        return { primaryTitle: "Experinces", secondaryTitle: "New Experiences" };
-      case "/pendingExperiences":
-        return { primaryTitle: "Experinces", secondaryTitle: "Pending Experiences" };
-      case "/resolvedExperiences":
-        return { primaryTitle: "Experinces", secondaryTitle: "Resolved Experiences" };
-      case "/profile":
+      //   return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };
+      case "/crm/cmform":
+        return {
+          primaryTitle: "Customer Manager",
+          secondaryTitle: "Create a New Customer Manager",
+        };
+      case "/crm/crmform":
+        return {
+          primaryTitle: "Experiences",
+          secondaryTitle: "Allot New Experience",
+        };
+      case "/crm/form":
+        return {
+          primaryTitle: "Head of the Business",
+          secondaryTitle: "Create a New Head of the Business Unit",
+        };
+      case "/crm/allExperiences":
+        return {
+          primaryTitle: "Experiences",
+          secondaryTitle: "All Experiences",
+        };
+      case "/crm/newExperiences":
+        return {
+          primaryTitle: "Experinces",
+          secondaryTitle: "New Experiences",
+        };
+      case "/crm/pendingExperiences":
+        return {
+          primaryTitle: "Experinces",
+          secondaryTitle: "Pending Experiences",
+        };
+      case "/crm/resolvedExperiences":
+        return {
+          primaryTitle: "Experinces",
+          secondaryTitle: "Resolved Experiences",
+        };
+      case "/crm/profile":
         return { primaryTitle: "Profile", secondaryTitle: null };
-      case "/notes":
+      case "/crm/notes":
         return { primaryTitle: "Notes", secondaryTitle: null };
-      case "/calendar":
+      case "/crm/calendar":
         return { primaryTitle: "Calendar", secondaryTitle: null };
       default:
         return { primaryTitle: "Page Not Found", secondaryTitle: null };
     }
   };
-
 
   const { primaryTitle, secondaryTitle } = getPageTitle1();
 
@@ -293,7 +328,10 @@ const Topbar = ({onLogout}) => {
 
   useEffect(() => {
     setSelected(getActivePage(location.pathname));
-    sessionStorage.setItem("selectedSidebarItem", getActivePage(location.pathname));
+    sessionStorage.setItem(
+      "selectedSidebarItem",
+      getActivePage(location.pathname)
+    );
   }, [location.pathname]);
 
   const logoSrc = logoLight;
@@ -312,19 +350,24 @@ const Topbar = ({onLogout}) => {
   }, []);
 
   const CustomDivider = () => (
-    <Box sx={{ width: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Box
+      sx={{
+        width: "20px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <FontAwesomeIcon icon={faAngleRight} /> {/* Custom divider icon */}
     </Box>
   );
 
-    const handleLogout = () => { 
-
-    sessionStorage.removeItem('crmtoken');
+  const handleLogout = () => {
+    sessionStorage.removeItem("crmtoken");
     onLogout();
     window.location.reload();
-    navigate('/login');
-  }
-
+    navigate("/crm/login");
+  };
 
   return (
     <Box
@@ -340,7 +383,13 @@ const Topbar = ({onLogout}) => {
         flexDirection="column"
         width="100%"
         bgcolor="#ffffff"
-        sx={{ overflowX: "hidden", flex: 1, marginTop: 1, background: "ffffff", backgroundColor: "#ffffff" }}
+        sx={{
+          overflowX: "hidden",
+          flex: 1,
+          marginTop: 1,
+          background: "ffffff",
+          backgroundColor: "#ffffff",
+        }}
       >
         {/* Header Section */}
         {isMobile && (
@@ -358,7 +407,13 @@ const Topbar = ({onLogout}) => {
             }}
           >
             {/* Logo on Mobile */}
-            <Box sx={{ maxWidth: "180px", height: "50px", backgroundColor: "#fefefe !important" }}>
+            <Box
+              sx={{
+                maxWidth: "180px",
+                height: "50px",
+                backgroundColor: "#fefefe !important",
+              }}
+            >
               <img
                 src={logoSrc}
                 alt="logo"
@@ -405,9 +460,16 @@ const Topbar = ({onLogout}) => {
               {/* <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "30px" : "25px" }}>
                 {getGreeting()} Delphin
               </Typography> */}
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}>
+              <Typography
+                sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}
+              >
                 {currentTime.toLocaleString("en-US", {
-                  month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
                 })}
               </Typography>
             </Box>
@@ -421,25 +483,30 @@ const Topbar = ({onLogout}) => {
                 alignItems: "center",
               }}
             >
-       <IconButton sx={{ gap: 1 }} onClick={handleNotificationsClick}>
-          <Badge badgeContent={unreadCount} color="error">
-            <Box
-              sx={{
-                width: isMobile ? 25 : 30,
-                height: isMobile ? 25 : 30,
-                borderRadius: "50%",
-                backgroundColor: colors.blueAccent[500],
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <NotificationsIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
-            </Box>
-          </Badge>
-        </IconButton>
-        {/* <NotificationDropdown /> */}
-              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+              <IconButton sx={{ gap: 1 }} onClick={handleNotificationsClick}>
+                <Badge badgeContent={unreadCount} color="error">
+                  <Box
+                    sx={{
+                      width: isMobile ? 25 : 30,
+                      height: isMobile ? 25 : 30,
+                      borderRadius: "50%",
+                      backgroundColor: colors.blueAccent[500],
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <NotificationsIcon
+                      sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }}
+                    />
+                  </Box>
+                </Badge>
+              </IconButton>
+              {/* <NotificationDropdown /> */}
+              <IconButton
+                onClick={() => navigate("/crm/profile")}
+                sx={{ gap: 1 }}
+              >
                 <Box
                   sx={{
                     width: isMobile ? 25 : 30,
@@ -450,23 +517,31 @@ const Topbar = ({onLogout}) => {
                     alignItems: "center",
                     justifyContent: "center",
                   }}
-                 > 
-                  <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+                >
+                  <PersonIcon
+                    sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }}
+                  />
                 </Box>
-                <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
+                <Typography
+                  sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}
+                >
                   {getCrmName()}
                 </Typography>
               </IconButton>
               <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={4000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="info" sx={{ width: '100%' }}>
-          {snackbarMsg}
-        </Alert>
-      </Snackbar>
+                open={snackbarOpen}
+                autoHideDuration={4000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              >
+                <Alert
+                  onClose={() => setSnackbarOpen(false)}
+                  severity="info"
+                  sx={{ width: "100%" }}
+                >
+                  {snackbarMsg}
+                </Alert>
+              </Snackbar>
             </Box>
           </Box>
         ) : (
@@ -499,9 +574,16 @@ const Topbar = ({onLogout}) => {
               {/* <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "20px" : "25px" }}>
                 {getGreeting()} Delphin
               </Typography> */}
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}>
+              <Typography
+                sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}
+              >
                 {currentTime.toLocaleString("en-US", {
-                  month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
                 })}
               </Typography>
             </Box>
@@ -515,24 +597,29 @@ const Topbar = ({onLogout}) => {
                 alignItems: "center",
               }}
             >
-       <IconButton sx={{ gap: 1 }} onClick={handleNotificationsClick}>
-          <Badge badgeContent={unreadCount} color="error">
-            <Box
-              sx={{
-                width: isMobile ? 25 : 30,
-                height: isMobile ? 25 : 30,
-                borderRadius: "50%",
-                backgroundColor: colors.blueAccent[500],
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <NotificationsIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
-            </Box>
-          </Badge>
-        </IconButton>
-              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+              <IconButton sx={{ gap: 1 }} onClick={handleNotificationsClick}>
+                <Badge badgeContent={unreadCount} color="error">
+                  <Box
+                    sx={{
+                      width: isMobile ? 25 : 30,
+                      height: isMobile ? 25 : 30,
+                      borderRadius: "50%",
+                      backgroundColor: colors.blueAccent[500],
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <NotificationsIcon
+                      sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }}
+                    />
+                  </Box>
+                </Badge>
+              </IconButton>
+              <IconButton
+                onClick={() => navigate("/crm/profile")}
+                sx={{ gap: 1 }}
+              >
                 <Box
                   sx={{
                     width: isMobile ? 25 : 30,
@@ -544,10 +631,14 @@ const Topbar = ({onLogout}) => {
                     justifyContent: "center",
                   }}
                 >
-                  <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+                  <PersonIcon
+                    sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }}
+                  />
                 </Box>
-                <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
-                 {getCrmName()}
+                <Typography
+                  sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}
+                >
+                  {getCrmName()}
                 </Typography>
               </IconButton>
             </Box>
@@ -582,12 +673,25 @@ const Topbar = ({onLogout}) => {
                 textAlign: isMobile ? "text" : "text",
               }}
             >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "20px", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  color: "#ffffff",
+                  fontSize: isMobile ? "20px" : "20px",
+                  fontWeight: "bold",
+                }}
+              >
                 {getPageTitle()}
               </Typography>
-              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+              <Box
+                sx={{
+                  color: "#ffffff",
+                  alignItems: "center",
+                  gap: 1,
+                  display: "flex",
+                }}
+              >
                 <HomeOutlinedIcon
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/crm")}
                   fontSize="small"
                   sx={{ cursor: "pointer" }}
                 />
@@ -622,19 +726,42 @@ const Topbar = ({onLogout}) => {
                 paddingLeft: isMobile ? "12px" : "20px",
               }}
             >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "17px" : "20px", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  color: "#ffffff",
+                  fontSize: isMobile ? "17px" : "20px",
+                  fontWeight: "bold",
+                }}
+              >
                 {primaryTitle}
               </Typography>
-              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+              <Box
+                sx={{
+                  color: "#ffffff",
+                  alignItems: "center",
+                  gap: 1,
+                  display: "flex",
+                }}
+              >
+                <HomeOutlinedIcon
+                  onClick={() => navigate("/crm")}
+                  fontSize="small"
+                  sx={{ cursor: "pointer" }}
+                />
                 <CustomDivider />
-                <Typography sx={{ cursor: "pointer", fontSize: "14px" }} onClick={ secondaryTitle ? () => navigate(-1) : undefined}>
+                <Typography
+                  sx={{ cursor: "pointer", fontSize: "14px" }}
+                  onClick={secondaryTitle ? () => navigate(-1) : undefined}
+                >
                   {primaryTitle}
                 </Typography>
                 {secondaryTitle && (
                   <>
                     <CustomDivider />
-                    <Typography sx={{ cursor: "pointer", fontSize: "14px" }} onClick={() => navigate(location.pathname)}>
+                    <Typography
+                      sx={{ cursor: "pointer", fontSize: "14px" }}
+                      onClick={() => navigate(location.pathname)}
+                    >
                       {secondaryTitle}
                     </Typography>
                   </>
@@ -646,7 +773,9 @@ const Topbar = ({onLogout}) => {
       </Box>
       <Box sx={{ alignItems: "center" }}>
         {/* Mobile Sidebar Modal */}
-        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
+        <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -674,39 +803,73 @@ const Topbar = ({onLogout}) => {
               boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
             }}
           >
-            <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-            <Item title="Customer Manager" to="/cm" icon={<WorkOutlineOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-            <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item
+              title="Dashboard"
+              to="/"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <Item
+              title="Customer Manager"
+              to="/cm"
+              icon={<WorkOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <Item
+              title="Organization"
+              to="/organization"
+              icon={<BusinessOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
             {/* <Item title="Tasks" to="/tasks" icon={<TaskOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} /> */}
-            <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-            <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-  <ListItem
-            button
-            onClick={handleLogout}
-            sx={{
-              color: colors.blueAccent[500],
-              borderRadius: "10px",
-              marginBottom: "8px",
-              "&:hover": {
-                backgroundColor: colors.blueAccent[700],
-                color: "white",
-              },
-            }}
-          >
-            <ListItemIcon sx={{ color: "inherit" }}>
-              <LogoutOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Logout"
+            <Item
+              title="Notes"
+              to="/notes"
+              icon={<DescriptionOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <Item
+              title="Calendar"
+              to="/calendar"
+              icon={<CalendarTodayOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <ListItem
+              button
+              onClick={handleLogout}
               sx={{
-                "& .MuiTypography-root": {
-                  fontWeight: "bold !important",
-                  fontSize: "15px",
+                color: colors.blueAccent[500],
+                borderRadius: "10px",
+                marginBottom: "8px",
+                "&:hover": {
+                  backgroundColor: colors.blueAccent[700],
+                  color: "white",
                 },
               }}
-            />
-          </ListItem>
-
+            >
+              <ListItemIcon sx={{ color: "inherit" }}>
+                <LogoutOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Logout"
+                sx={{
+                  "& .MuiTypography-root": {
+                    fontWeight: "bold !important",
+                    fontSize: "15px",
+                  },
+                }}
+              />
+            </ListItem>
           </Box>
         </Modal>
       </Box>
@@ -715,7 +878,10 @@ const Topbar = ({onLogout}) => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       >
-        <Box sx={{ width: isMobile ? 250 : 350, padding: 2 }} role="presentation">
+        <Box
+          sx={{ width: isMobile ? 250 : 350, padding: 2 }}
+          role="presentation"
+        >
           <Typography variant="h6" sx={{ mb: 2 }}>
             Notifications
           </Typography>
@@ -734,7 +900,9 @@ const Topbar = ({onLogout}) => {
                       <span>{notif.message}</span>
                       <br />
                       <span style={{ fontSize: 12, color: "#888" }}>
-                        {notif.timestamp ? new Date(notif.timestamp).toLocaleString() : ""}
+                        {notif.timestamp
+                          ? new Date(notif.timestamp).toLocaleString()
+                          : ""}
                       </span>
                     </>
                   }

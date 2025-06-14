@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Input, Table, Row, Col, Button, Checkbox, Dropdown, Menu } from "antd";
-import { SearchOutlined, FilterOutlined, ImportOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  FilterOutlined,
+  ImportOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getCrmId } from "../../config";
 
@@ -24,12 +28,17 @@ const AllExperiences = ({ apiUrl }) => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState({ priority: [], status: [] });
+  const [selectedFilters, setSelectedFilters] = useState({
+    priority: [],
+    status: [],
+  });
 
   // Fetch from API on mount
   const fetchTickets = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getTicketsbycrmId/${getCrmId()}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/v1/getTicketsbycrmId/${getCrmId()}`
+      );
       const data = await response.json();
       if (response.ok && Array.isArray(data.experienceDetails)) {
         const transformedData = data.experienceDetails.map((item, idx) => ({
@@ -71,7 +80,7 @@ const AllExperiences = ({ apiUrl }) => {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.type === 'notification' && data.crmid === getCrmId()) {
+        if (data.type === "notification" && data.crmid === getCrmId()) {
           fetchTickets();
         }
       } catch (e) {}
@@ -110,19 +119,25 @@ const AllExperiences = ({ apiUrl }) => {
       );
     }
     if (filters.priority.length) {
-      filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
+      filtered = filtered.filter((ticket) =>
+        filters.priority.includes(ticket.priority)
+      );
     }
     if (filters.status.length) {
-      filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
+      filtered = filtered.filter((ticket) =>
+        filters.status.includes(ticket.status)
+      );
     }
     setFilteredTickets(filtered);
   };
 
   // Get Unique Values for Filters
-  const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
+  const getUniqueValues = (key) => [
+    ...new Set(tickets.map((ticket) => ticket[key])),
+  ];
 
   const handleRowClick = (record) => {
-    navigate('/ticketdetails', { state: { ticket: record } });
+    navigate("/crm/ticketdetails", { state: { ticket: record } });
   };
 
   // Filter Dropdown Menu
@@ -183,7 +198,7 @@ const AllExperiences = ({ apiUrl }) => {
         <Col xs={24} sm={12} md={8}>
           <Dropdown
             overlay={filterMenu}
-            trigger={['click']}
+            trigger={["click"]}
             visible={filterVisible}
             onVisibleChange={setFilterVisible}
             placement="bottomRight"
@@ -191,7 +206,11 @@ const AllExperiences = ({ apiUrl }) => {
             <Button
               type="primary"
               icon={<FilterOutlined />}
-              style={{ fontWeight: "bold", background: "#3e4396", width: "100%" }}
+              style={{
+                fontWeight: "bold",
+                background: "#3e4396",
+                width: "100%",
+              }}
               block
             >
               Filter
@@ -202,14 +221,14 @@ const AllExperiences = ({ apiUrl }) => {
 
       {/* Data Table */}
       <Table
-                className="custom-ant-table-header"
+        className="custom-ant-table-header"
         columns={columns}
         dataSource={filteredTickets}
         pagination={{ pageSize: 10 }}
         scroll={{ x: 900 }}
         onRow={(record) => ({
           onClick: () => handleRowClick(record),
-          style: { cursor: "pointer" }
+          style: { cursor: "pointer" },
         })}
         rowClassName={() => "custom-row"}
         bordered
