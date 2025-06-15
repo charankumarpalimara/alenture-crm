@@ -38,31 +38,31 @@ import { getCrmId, getCrmName } from "../../config";
 
 // Shared getActivePage function
 const getActivePage = (pathname) => {
-  if (pathname.includes("/notes")) {
-    return "/notes";
+  if (pathname.includes("/crm/notes")) {
+    return "/crm/notes";
   } else if (pathname.includes("/calendar")) {
-    return "/calendar";
+    return "/crm/calendar";
   } else if (
-    pathname.includes("/allExperiences") ||
-    pathname.includes("/ticketdetails") ||
-    pathname.includes("/profile") ||
-    pathname.includes("/newExperiences") ||
-    pathname.includes("/pendingExperiences") ||
-    pathname.includes("/taskdetails") ||
-    pathname.includes("/resolvedExperiences")
+    pathname.includes("/crm/allExperiences") ||
+    pathname.includes("/crm/ticketdetails") ||
+    pathname.includes("/crm/profile") ||
+    pathname.includes("/crm/newExperiences") ||
+    pathname.includes("/crm/pendingExperiences") ||
+    pathname.includes("/crm/taskdetails") ||
+    pathname.includes("/crm/resolvedExperiences")
   ) {
     return "/"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/cmform") ||
-    pathname.includes("/cmdetails") ||
-    pathname.includes("/cm")
+    pathname.includes("/crm/cmform") ||
+    pathname.includes("/crm/cmdetails") ||
+    pathname.includes("/crm/cm")
   ) {
-    return "/cm"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/cm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/organization") ||
-    pathname.includes("/organizationdetails")
+    pathname.includes("/crm/organization") ||
+    pathname.includes("/crm/organizationdetails")
   ) {
-    return "/organization"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
   }
   // else if (
   //   pathname.includes("/tasks") ||
@@ -74,11 +74,11 @@ const getActivePage = (pathname) => {
   //   return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
   // }
   else if (
-    pathname.includes("/tasks") ||
-    pathname.includes("/taskform") ||
-    pathname.includes("/taskdetails")
+    pathname.includes("/crm/tasks") ||
+    pathname.includes("/crm/taskform") ||
+    pathname.includes("/crm/taskdetails")
   ) {
-    return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tasks"; // Ensure this matches the `to` prop of the Experiences Item
   } else {
     return pathname;
   }
@@ -189,47 +189,47 @@ const Topbar = ({ onLogout }) => {
 
   const getPageTitle = () => {
     switch (location.pathname) {
-      case "/":
-        return "Dashboard";
-      case "/cm":
-        return "Customer Manager";
       case "/crm":
+        return "Dashboard";
+      case "/crm/cm":
+        return "Customer Manager";
+      case "/crm/crm":
         return "Customer Relationship Manager";
-      case "/hob":
+      case "/crm/hob":
         return "Head of The Business";
-      case "/cmform":
+      case "/crm/cmform":
         return "Create a New Customer Manager";
-      case "/crmform":
+      case "/crm/crmform":
         return "Allot New Experience";
-      case "/form":
+      case "/crm/form":
         return "";
-      case "/tasks":
+      case "/crm/tasks":
         return "Tasks List";
-      case "/taskdetails":
+      case "/crm/taskdetails":
         return "Task Details";
-      case "/taskform":
+      case "/crm/taskform":
         return "Create New Task";
-      case "/ticketdetails":
+      case "/crm/ticketdetails":
         return " Experience Details";
-      case "/cmdetails":
+      case "/crm/cmdetails":
         return "Customer Manager Details";
-      case "/allExperiences":
+      case "/crm/allExperiences":
         return "All Experiences";
-      case "/organization":
+      case "/crm/organization":
         return "Organization";
-      case "/organizationdetails":
+      case "/crm/organizationdetails":
         return "Organization Details";
-      case "/newExperiences":
+      case "/crm/newExperiences":
         return "New Experiences";
-      case "/pendingExperiences":
+      case "/crm/pendingExperiences":
         return "Pending Experiences";
-      case "/resolvedExperiences":
+      case "/crm/resolvedExperiences":
         return "Resolved Experiences";
-      case "/profile":
+      case "/crm/profile":
         return "Profile";
-      case "/notes":
+      case "/crm/notes":
         return "Notes";
-      case "/calendar":
+      case "/crm/calendar":
         return "Calendar";
       default:
         return "Page Not Found";
@@ -805,7 +805,7 @@ const Topbar = ({ onLogout }) => {
           >
             <Item
               title="Dashboard"
-              to="/"
+              to="/crm"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -813,7 +813,7 @@ const Topbar = ({ onLogout }) => {
             />
             <Item
               title="Customer Manager"
-              to="/cm"
+              to="/crm/cm"
               icon={<WorkOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -821,7 +821,7 @@ const Topbar = ({ onLogout }) => {
             />
             <Item
               title="Organization"
-              to="/organization"
+              to="/crm/organization"
               icon={<BusinessOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -830,7 +830,7 @@ const Topbar = ({ onLogout }) => {
             {/* <Item title="Tasks" to="/tasks" icon={<TaskOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} /> */}
             <Item
               title="Notes"
-              to="/notes"
+              to="/crm/notes"
               icon={<DescriptionOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -838,7 +838,7 @@ const Topbar = ({ onLogout }) => {
             />
             <Item
               title="Calendar"
-              to="/calendar"
+              to="/crm/calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
