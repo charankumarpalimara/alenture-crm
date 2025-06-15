@@ -24,37 +24,37 @@ import { useNavigate } from "react-router-dom";
 
 // Shared getActivePage function
 const getActivePage = (pathname) => {
-  if (pathname.includes("/notes")) {
-    return "/notes";
-  } else if (pathname.includes("/calendar")) {
-    return "/calendar";
+  if (pathname.includes("/crm/notes")) {
+    return "/crm/notes";
+  } else if (pathname.includes("/crm/calendar")) {
+    return "/crm/calendar";
   } else if (
-    pathname.includes("/allExperiences") ||
-    pathname.includes("/ticketdetails") ||
-    pathname.includes("/profile") ||
+    pathname.includes("/crm/allExperiences") ||
+    pathname.includes("/crm/ticketdetails") ||
+    pathname.includes("/crm/profile") ||
     pathname.includes("/newExperiences") ||
-    pathname.includes("/pendingExperiences") ||
-    pathname.includes("/resolvedExperiences") ||
-    pathname.includes("/taskdetails")
+    pathname.includes("/crm/pendingExperiences") ||
+    pathname.includes("/crm/resolvedExperiences") ||
+    pathname.includes("/crm/taskdetails")
   ) {
-    return "/"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/cmform") ||
-    pathname.includes("/cmdetails") ||
-    pathname.includes("/cm")
+    pathname.includes("/crm/cmform") ||
+    pathname.includes("/crm/cmdetails") ||
+    pathname.includes("/crm/cm")
   ) {
-    return "/cm"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/cm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/tasks") ||
-    pathname.includes("/taskform") ||
-    pathname.includes("/taskdetails")
+    pathname.includes("/crm/tasks") ||
+    pathname.includes("/crm/taskform") ||
+    pathname.includes("/crm/taskdetails")
   ) {
-    return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tasks"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/organization") ||
-    pathname.includes("/organizationdetails")
+    pathname.includes("/crm/organization") ||
+    pathname.includes("/crm/organizationdetails")
   ) {
-    return "/organization"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
   } else {
     return pathname;
   }
