@@ -183,6 +183,10 @@ const Notes = () => {
     }
   };
 
+
+       const filteredTasks = notes.filter((task) => 
+    task.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   // const StyledTextField = ({ label, name, value, handleChange, handleBlur, error, multiline = false, rows = 1 }) => {
   //   return (
   //     <TextField
@@ -344,9 +348,9 @@ const Notes = () => {
             gap: 2,
           }}
         >
-          {notes.map((note, index) => (
+              {filteredTasks.map((task) => (
             <Box
-              key={note.id || index}
+                key={task.id}
               sx={{
                 padding: 2,
                 backgroundColor: "#f9f9f9",
@@ -367,10 +371,10 @@ const Notes = () => {
                 <Typography
                   sx={{ fontWeight: "bold", marginBottom: 1, fontSize: "16px" }}
                 >
-                  {note.name}
+                  {task.name}
                 </Typography>
                 <Typography sx={{ marginBottom: 2, fontWeight: "14px" }}>
-                  {note.description}
+                  {task.description}
                 </Typography>
               </Box>
               <Box
@@ -382,12 +386,12 @@ const Notes = () => {
                 }}
               >
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {note.date}
+                  {task.date}
                 </Typography>
                 <Button
                   variant="text"
                   size="small"
-                  onClick={() => handleEditClick(note)}
+                  onClick={() => handleEditClick(task)}
                   sx={{ minWidth: 0, padding: "4px" }}
                 >
                   <EditIcon fontSize="small" />
