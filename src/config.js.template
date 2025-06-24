@@ -1,0 +1,27 @@
+// Copy this file to config.js and update with your actual API URL
+export const apiUrl = "YOUR_API_URL_HERE";
+
+
+export function getCrmId() {
+  const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
+  return userDetails.crmid || '';
+
+}
+
+export function getCrmName() {
+  const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
+  return userDetails.firstname + " " + userDetails.lastname || '';
+}
+
+
+export function getCreaterRole() {
+  const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
+  return userDetails.extraind10 ||'';
+}
+
+
+export function getCrmEmail() {
+  const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
+  return userDetails.email || '';
+}
+

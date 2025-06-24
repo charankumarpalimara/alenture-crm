@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 // import download from 'downloadjs';
 // import JoditEditor from 'jodit-react';
 // import {Jodit} from 'jodit-pro';
-import 'jodit-pro/es5/jodit.min.css';
+// import 'jodit-pro/es5/jodit.min.css';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 // import { Block } from "@mui/icons-material";
 // import PhoneIcon from '@mui/icons-material/Phone';

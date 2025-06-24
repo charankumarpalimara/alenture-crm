@@ -21,6 +21,7 @@ import {
   // Add as AddIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { getCrmId } from "../../config";
 
 // Columns for DataGrid
 const columns = [
@@ -33,7 +34,7 @@ const columns = [
 ];
 
 
-const ResolvedExperiences = () => {
+const ResolvedExperiences = ({apiUrl}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -50,8 +51,7 @@ const ResolvedExperiences = () => {
   React.useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
-        const response = await fetch(`http://161.35.54.196/api/v1/getResolvedTicketsbyCrmid/${userDetails.crmid}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getResolvedTicketsbyCrmid/${getCrmId()}`);
         const data = await response.json();
         console.log("Fetched Tickets:", data);
         if (response.ok && Array.isArray(data.experienceDetails)) {

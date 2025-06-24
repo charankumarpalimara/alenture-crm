@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Logo from './logo.png';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, apiUrl }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const response = await fetch('http://161.35.54.196/api/v1/crmLogin', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/crmLogin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

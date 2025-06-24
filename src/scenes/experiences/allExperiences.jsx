@@ -50,7 +50,7 @@ const AllExperiences = () => {
   const fetchTickets = async () => {
     try {
       const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
-      const response = await fetch(`http://161.35.54.196/api/v1/getTicketsbycrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getTicketsbycrmId/${userDetails.crmid}`);
       const data = await response.json();
       if (response.ok && Array.isArray(data.experienceDetails)) {
         // Map API output to DataGrid row format

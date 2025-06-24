@@ -12,8 +12,9 @@ import StatBox from "../../components/StatBox";
 // import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import { getCrmId } from "../../config";
 
-const Dashboard = () => {
+const Dashboard = ({apiUrl}) => {
   // const theme = useTheme();
   // const colors = tokens(theme.palette.mode); // Get theme colors
 
@@ -26,30 +27,29 @@ const Dashboard = () => {
 
 
   const fetchAllCounts = async () => {
- const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/getAllExperiencesCountByCrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getAllExperiencesCountByCrmId/${getCrmId()}`);
       const data = await response.json();
       setAllExperienceCount(data.count || 0);
     } catch {
       setAllExperienceCount(0);
     }
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/getNewExperiencesCountByCrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getNewExperiencesCountByCrmId/${getCrmId()}`);
       const data = await response.json();
       setNewExperienceCount(data.count || 0);
     } catch {
       setNewExperienceCount(0);
     }
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/getResolvedExperiencesCountByCrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getResolvedExperiencesCountByCrmId/${getCrmId()}`);
       const data = await response.json();
       setResolvedExperienceCount(data.count || 0);
     } catch {
       setResolvedExperienceCount(0);
     }
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/getPendingExperiencesCountByCrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getPendingExperiencesCountByCrmId/${getCrmId()}`);
       const data = await response.json();
       setPendingExperienceCount(data.count || 0);
     } catch {

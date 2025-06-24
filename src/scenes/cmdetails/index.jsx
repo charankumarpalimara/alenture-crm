@@ -5,6 +5,8 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Country } from 'country-state-city';
 import { useLocation, useNavigate } from 'react-router-dom';
+// import { apiUrl } from '../../config';\
+import { getCrmId, getCrmName, getCreaterRole } from '../../config';
 
 const { Text } = Typography;
 
@@ -124,9 +126,9 @@ lastName: ticket.lastname ,
     formData.append('email', values.email );
     formData.append('phoneCode', values.phoneCode);
     formData.append('PhoneNo', values.PhoneNo );
-       const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails"));
-        const crmid =  sessionData?.crmid ;
-        const crmname = sessionData?.firstname + ' ' + sessionData?.lastname;
+      //  const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails"));
+        const crmid =  getCrmId() ;
+        const crmname = getCrmName() ;
     formData.append('crmid', crmid );
     formData.append('crmname', crmname );
     formData.append('organizationid', values.organizationid || '');
@@ -154,8 +156,8 @@ lastName: ticket.lastname ,
 
 
       // const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails")); // replace with your actual key
-      const createrrole = sessionData?.extraind10 || "";
-      const createrid =  sessionData?.crmid ;
+      const createrrole = getCreaterRole();
+      const createrid =  getCrmId();
     formData.append("createrrole", createrrole);
     formData.append("createrid", createrid)
 
@@ -178,7 +180,7 @@ lastName: ticket.lastname ,
       formData.append('cmProfileImageByAdminHob', file, 'profile.jpg');
     }
     try {
-      const response = await fetch('http://0.0.0.0:8080/v1/updateCmProfileByAdminHob', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/updateCmProfileByAdminHob`, {
         method: 'POST',
         body: formData,
       });

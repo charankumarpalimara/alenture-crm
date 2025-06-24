@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import Badge from '@mui/material/Badge';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { getCrmId, getCrmName } from "../../config";
 
 // Shared getActivePage function
 const getActivePage = (pathname) => {
@@ -116,7 +117,7 @@ const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
 };
 
 const Topbar = ({onLogout}) => {
-  const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {}; // Use correct key for CRM
+  // const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {}; // Use correct key for CRM
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -134,13 +135,13 @@ const Topbar = ({onLogout}) => {
 
   // WebSocket connection for live notifications
   useEffect(() => {
-    const WS_URL = process.env.REACT_APP_WS_URL || "ws://161.35.54.196:8080";
-    const ws = new WebSocket(WS_URL);
+  // const WS_URL = "ws://147.182.163.213:3000/ws/";
+    const ws = new WebSocket(process.env.REACT_APP_WS_URL);
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         console.log('WebSocket data:', data); // Debug incoming messages
-        if (data.type === 'notification') {
+        if (data.type === 'notification' && data.crmid === getCrmId()) {
           setNotifications((prev) => [data, ...prev]);
           setUnreadCount((prev) => prev + 1);
           setSnackbarMsg(data.message);
@@ -149,7 +150,7 @@ const Topbar = ({onLogout}) => {
       } catch (e) {}
     };
     return () => ws.close();
-  }, [userDetails.crmid]);
+  }, []);
 
   const handleNotificationsClick = () => {
     setUnreadCount(0);
@@ -157,24 +158,24 @@ const Topbar = ({onLogout}) => {
   };
 
   // Notification dropdown/modal (simple version)
-  const NotificationDropdown = () => (
-    <Modal open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-      <Box sx={{ position: 'absolute', top: 80, right: 20, width: 350, bgcolor: 'background.paper', boxShadow: 24, p: 2, borderRadius: 2 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Notifications</Typography>
-        {notifications.length === 0 ? (
-          <Typography>No notifications</Typography>
-        ) : (
-          notifications.slice(0, 10).map((notif, idx) => (
-            <Box key={idx} sx={{ mb: 1, p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-              <Typography variant="subtitle2">{notif.title}</Typography>
-              <Typography variant="body2">{notif.message}</Typography>
-              <Typography variant="caption" color="text.secondary">{new Date(notif.timestamp).toLocaleString()}</Typography>
-            </Box>
-          ))
-        )}
-      </Box>
-    </Modal>
-  );
+  // const NotificationDropdown = () => (
+  //   <Modal open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+  //     <Box sx={{ position: 'absolute', top: 80, right: 20, width: 350, bgcolor: 'background.paper', boxShadow: 24, p: 2, borderRadius: 2 }}>
+  //       <Typography variant="h6" sx={{ mb: 2 }}>Notifications</Typography>
+  //       {notifications.length === 0 ? (
+  //         <Typography>No notifications</Typography>
+  //       ) : (
+  //         notifications.slice(0, 10).map((notif, idx) => (
+  //           <Box key={idx} sx={{ mb: 1, p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+  //             <Typography variant="subtitle2">{notif.title}</Typography>
+  //             <Typography variant="body2">{notif.message}</Typography>
+  //             <Typography variant="caption" color="text.secondary">{new Date(notif.timestamp).toLocaleString()}</Typography>
+  //           </Box>
+  //         ))
+  //       )}
+  //     </Box>
+  //   </Modal>
+  // );
 
 
   const getPageTitle = () => {
@@ -453,7 +454,7 @@ const Topbar = ({onLogout}) => {
                   <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
                 </Box>
                 <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
-                  {userDetails.firstname} {userDetails.lastname}
+                  {getCrmName()}
                 </Typography>
               </IconButton>
               <Snackbar
@@ -546,7 +547,7 @@ const Topbar = ({onLogout}) => {
                   <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
                 </Box>
                 <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
-                 {userDetails.firstname} {userDetails.lastname}
+                 {getCrmName()}
                 </Typography>
               </IconButton>
             </Box>

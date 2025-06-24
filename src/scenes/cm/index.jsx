@@ -19,7 +19,7 @@ import {
   // FilterList as FilterIcon,
   // ImportExport as ImportExportIcon,
   Add as AddIcon,
-  PasswordSharp,
+  // PasswordSharp,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -68,7 +68,7 @@ useEffect(() => {
   const fetchRelations = async () => {
     try {
       const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
-      const response = await fetch(`http://161.35.54.196/api/v1/getRelationByCrmId/${userDetails.crmid}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getRelationByCrmId/${userDetails.crmid}`);
       const result = await response.json();
 
       const mapped = (Array.isArray(result.data) ? result.data : []).map((item, idx) => ({
@@ -375,8 +375,8 @@ useEffect(() => {
             backgroundColor: colors.blueAccent[700],
             color: "#ffffff",
           },
-        }}
-          rows={tickets}
+         }}
+          rows={filteredTickets.length ? filteredTickets : tickets}
           columns={columns}
           pageSize={10}
           onRowClick={handleRowClick}

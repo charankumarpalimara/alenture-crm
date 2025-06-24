@@ -65,7 +65,7 @@ const handleSearchChange = (event) => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await fetch("http://161.35.54.196/api/v1/getAllOrgs");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getAllOrgs`);
         const data = await response.json();
         console.log("API Response:", data);
         if (response.ok) {

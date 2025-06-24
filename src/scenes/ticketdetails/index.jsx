@@ -3,7 +3,7 @@ import { Form, Input, Select, Button as AntdButton, Col, Row, message, Modal as 
 import { Formik } from "formik";
 import { tokens } from "../../theme";
 import * as yup from "yup";
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import download from 'downloadjs';
 import {
@@ -30,9 +30,6 @@ import { io } from "socket.io-client";
 
 const { Option } = Select;
 
-const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || (window.location.hostname === "localhost"
-  ? "http://localhost:8080"
-  : "http://161.35.54.196:8080");
 
 const TicketDetails = () => {
 const [form] = Form.useForm();
@@ -157,7 +154,7 @@ const socketRef = useRef(null);
   useEffect(() => {
     const fetchCrmIds = async () => {
       try {
-        const response = await fetch('http://161.35.54.196/api/v1/getCrmId');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getCrmId`);
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data.crmid)) {
@@ -169,44 +166,53 @@ const socketRef = useRef(null);
     fetchCrmIds();
   }, []);
 
-useEffect(() => {
   const crmidValue = form.getFieldValue('crmid');
-  if (crmidValue) {
-    fetch(`http://161.35.54.196/api/v1/getCrmNamebyId/${crmidValue}`)
-      .then(res => res.json())
-      .then(data => {
-        form.setFieldsValue({ crmname: data.crmNames || '' });
-      });
-  } else {
-    form.setFieldsValue({ crmname: '' });
-  }
-}, [form.getFieldValue('crmid')]);
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (crmidValue) {
+      fetch(`${process.env.REACT_APP_API_URL}/v1/getCrmNamebyId/${crmidValue}`)
+        .then(res => res.json())
+        .then(data => {
+          form.setFieldsValue({ crmname: data.crmNames || '' });
+        });
+    } else {
+      form.setFieldsValue({ crmname: '' });
+    }
+  }, [form, crmidValue]);
+
+  const fetchTasks = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getTaskDataByExpId`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          experienceId: ticket.experienceid,
+          crmid: ticket.crmid,
+        }),
+      });
+      const data = await response.json();
+      if (data && data.data) {
+        setTasks(data.data);
+      }
+    } catch (error) {
+      setTasks([]);
+    }
+  }, [ticket.experienceid, ticket.crmid]);
+
+  useEffect(() => {
+    if (!ticket.experienceid || !ticket.crmid) return;
+    fetchTasks();
+  }, [ticket.experienceid, ticket.crmid, fetchTasks]);
+
+// For fetchTasks
 useEffect(() => {
   if (!ticket.experienceid || !ticket.crmid) return;
   fetchTasks();
-}, [ticket.experienceid, ticket.crmid]);
+  // Add fetchTasks as dependency
+}, [ticket.experienceid, ticket.crmid, fetchTasks]);
 
 
-const fetchTasks = async () => {
-  try {
-    const response = await fetch(`http://161.35.54.196/api/v1/getTaskDataByExpId`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        experienceId: ticket.experienceid,
-        crmid: ticket.crmid,
-      }),
-    });
-    const data = await response.json();
-    if (data && data.data) {
-      setTasks(data.data);
-    }
-  } catch (error) {
-    setTasks([]);
-  }
-};
+
 
 
 
@@ -354,7 +360,7 @@ const fetchTasks = async () => {
 
 
 useEffect(() => {
-  socketRef.current = io(SOCKET_URL);
+  socketRef.current = io(process.env.REACT_APP_SOCKET_URL);
   if (ticket.experienceid && ticket.crmid) {
     socketRef.current.emit('joinRoom', {
       experienceid: ticket.experienceid,
@@ -398,7 +404,7 @@ const handleSendMessage = async () => {
 
   // Save message to DB via REST API
   try {
-    await fetch("http://161.35.54.196/api/v1/chatInsert", {
+    await fetch(`${process.env.REACT_APP_API_URL}/v1/chatInsert`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(msgData),
@@ -417,7 +423,7 @@ useEffect(() => {
     if (!ticket.experienceid || !ticket.crmid) return;
     try {
       const res = await fetch(
-        `http://161.35.54.196/api/v1/getChatMessages?experienceid=${ticket.experienceid}&crmid=${ticket.crmid}`
+        `${process.env.REACT_APP_API_URL}/v1/getChatMessages?experienceid=${ticket.experienceid}&crmid=${ticket.crmid}`
       );
       const data = await res.json();
       if (Array.isArray(data.messages)) {
@@ -444,7 +450,7 @@ useEffect(() => {
     };
 
     try {
-      await fetch("http://161.35.54.196/api/v1/updateExperienceStatus", {
+      await fetch(`${process.env.REACT_APP_API_URL}/v1/updateExperienceStatus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(msgData),
@@ -504,7 +510,7 @@ useEffect(() => {
   const handleConfirmDelete = async () => {
     if (!deletingTaskId) return;
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/TaskDelete/${deletingTaskId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/TaskDelete/${deletingTaskId}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -525,7 +531,7 @@ useEffect(() => {
   const handleConfirmComplete = async () => {
     if (!completeTaskId) return;
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/updateTaskStatus/${completeTaskId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/updateTaskStatus/${completeTaskId}`, {
         method: "POST",
       });
       if (response.ok) {
@@ -566,7 +572,7 @@ useEffect(() => {
 
       setLoading(true);
       try {
-        const response = await fetch("http://161.35.54.196/api/v1/createTask", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/createTask`, {
           method: "POST",
           body: formData,
         });
@@ -679,7 +685,7 @@ useEffect(() => {
         const crmid = values.crmid;
         const crmname = values.crmname;
 
-        const response = await fetch('http://161.35.54.196/api/v1/AssignTask', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/AssignTask`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ experienceid, crmid, existcrmid, crmname }),
@@ -720,7 +726,7 @@ useEffect(() => {
                 getPopupContainer={trigger => trigger.parentNode}
                 onChange={async (value) => {
                   try {
-                    const res = await fetch(`http://161.35.54.196/api/v1/getCrmNamebyId/${value}`);
+                    const res = await fetch(`${process.env.REACT_APP_API_URL}/v1/getCrmNamebyId/${value}`);
                     const data = await res.json();
                     assignForm.setFieldsValue({ crmname: data.crmNames || '' });
                   } catch {
@@ -870,7 +876,7 @@ useEffect(() => {
 
         // Call backend API to update priority
         try {
-          await fetch("http://161.35.54.196/api/v1/updateExperiencePriority", {
+          await fetch(`${process.env.REACT_APP_API_URL}/v1/updateExperiencePriority`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -1044,7 +1050,7 @@ useEffect(() => {
                     }}
                       onClick={async () => {
                         try {
-                          await fetch("http://161.35.54.196/api/v1/updateExperienceStatusToResolve", {
+                          await fetch(`${process.env.REACT_APP_API_URL}/v1/updateExperienceStatusToResolve`, {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({

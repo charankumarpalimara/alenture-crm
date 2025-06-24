@@ -6,6 +6,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { Country } from 'country-state-city';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { getCrmId, getCreaterRole, getCrmName} from '../../config';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -24,7 +25,7 @@ function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
   };
 }
 
-const CmForm = () => {
+const CmForm = ({ apiUrl }) => {
   const [form] = Form.useForm();
   const [profileImage, setProfileImage] = useState(null);
   const [originalImage, setOriginalImage] = useState(null);
@@ -44,7 +45,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await fetch("http://161.35.54.196/api/v1/getAllOrgs");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getAllOrgs`);
         const data = await response.json();
         if (response.ok && Array.isArray(data.data)) {
           setOrganizationNames(data.data.map(item => item.organizationname || "N/A"));
@@ -52,7 +53,7 @@ const navigate = useNavigate();
       } catch (error) {}
     };
     fetchTickets();
-  }, []);
+  }, [apiUrl]);
     const crmidValue = form.getFieldValue('crmid');
 
 
@@ -63,7 +64,7 @@ const navigate = useNavigate();
   useEffect(() => {
     // if (!isEditing) return;
     if (crmidValue) {
-      fetch(`http://161.35.54.196/api/v1/getCrmNamebyId/${crmidValue}`)
+      fetch(`${process.env.REACT_APP_API_URL}/v1/getCrmNamebyId/${crmidValue}`)
         .then(res => res.json())
         .then(data => {
           setCrmName(data.crmNames || '');
@@ -77,7 +78,7 @@ const navigate = useNavigate();
 
   const fetchBranch = async (orgName) => {
     try {
-      const response = await fetch(`http://161.35.54.196/api/v1/getBranchbyOrganizationname/${orgName}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getBranchbyOrganizationname/${orgName}`);
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data.branchDetails)) {
@@ -171,14 +172,13 @@ const handleFormSubmit = async (values) => {
   formData.append("organization", values.organization || "");
   formData.append("branch", values.branch || "");
   formData.append("username", values.email || "");
-  const sessionData = JSON.parse(sessionStorage.getItem("CrmDetails"));
-    const createrid = sessionData?.adminid || sessionData?.crmid || sessionData?.hobid || "";
-    const creatername =  sessionData?.firstname + " " + sessionData?.lastname ;
+    const createrid = getCrmId() || "";
+    const creatername =  getCrmName() ;
   formData.append("crmId", createrid || "");
   formData.append("crmName", creatername || "");
 
 
-  const createrrole = sessionData?.extraind10 || "";
+  const createrrole = getCreaterRole() || "";
 
   const password = (values.firstName || "") + (values.PhoneNo || "");
   formData.append("createrrole", createrrole);
@@ -205,7 +205,7 @@ const handleFormSubmit = async (values) => {
   }
 
   try {
-    await axios.post('http://161.35.54.196/api/v1/createCm', formData, {
+    await axios.post(`${apiUrl}/v1/createCm`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     message.success("CM Registered Successfully!");

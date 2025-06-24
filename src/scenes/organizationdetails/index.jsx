@@ -56,7 +56,7 @@ const OrganizationDetails = () => {
   useEffect(() => {
     const fetchGetAllData = async () => {
       try {
-        const response = await fetch(`http://161.35.54.196/api/v1/getOrganizationBranchesByOrgid/${ticket.id}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getOrganizationBranchesByOrgid/${ticket.id}`);
         const data = await response.json();
         if (response.ok && Array.isArray(data.rows)) {
           setBranchesData(data.rows); // full branch objects

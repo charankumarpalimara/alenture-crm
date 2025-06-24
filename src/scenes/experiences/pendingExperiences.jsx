@@ -21,6 +21,7 @@ import {
   // Add as AddIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { getCrmId } from "../../config";
 
 // Columns for DataGrid
 const columns = [
@@ -33,7 +34,7 @@ const columns = [
 ];
 
 
-const PendingExperiences = () => {
+const PendingExperiences = ({apiUrl}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -50,8 +51,7 @@ const PendingExperiences = () => {
   React.useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
-        const response = await fetch(`http://161.35.54.196/api/v1/getPendingTicketsbyCrmid/${userDetails.crmid}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/getPendingTicketsbyCrmid/${getCrmId()}`);
         const data = await response.json();
         if (response.ok && Array.isArray(data.experienceDetails)) {
           const transformedData = data.experienceDetails.map((item, idx) => ({
@@ -84,14 +84,11 @@ const PendingExperiences = () => {
     };
     fetchTickets();
 
-    // WebSocket live update logic
-    const WS_URL = process.env.REACT_APP_WS_URL || "ws://161.35.54.196:8080";
-    const userDetails = JSON.parse(sessionStorage.getItem('CrmDetails')) || {};
-    const ws = new window.WebSocket(WS_URL);
+    const ws = new window.WebSocket(process.env.REACT_APP_WS_URL);
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.type === 'notification' && data.crmid === userDetails.crmid) {
+        if (data.type === 'notification' && data.crmid === getCrmId) {
           fetchTickets();
         }
       } catch (e) {}
