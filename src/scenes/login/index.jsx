@@ -41,7 +41,7 @@ const Login = ({ onLogin }) => {
 
       if (response.ok) {
         onLogin();
-        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("crmtoken", data.token);
         sessionStorage.setItem("CrmDetails", JSON.stringify(data.data));
         navigate("/crm");
       } else {
