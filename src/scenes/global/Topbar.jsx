@@ -21,7 +21,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 // import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -222,15 +222,17 @@ const Topbar = ({ onLogout }) => {
       case "/crm/newExperiences":
         return "New Experiences";
       case "/crm/pendingExperiences":
-        return "Pending Experiences";
+       return "Pending Experiences";
       case "/crm/resolvedExperiences":
-        return "Resolved Experiences";
+        return "Resolved Experiences"; 
       case "/crm/profile":
         return "Profile";
       case "/crm/notes":
         return "Notes";
       case "/crm/calendar":
         return "Calendar";
+      case "/crm/tickets":
+        return "Experiences";  
       default:
         return "Page Not Found";
     }
@@ -308,6 +310,8 @@ const Topbar = ({ onLogout }) => {
         return { primaryTitle: "Notes", secondaryTitle: null };
       case "/crm/calendar":
         return { primaryTitle: "Calendar", secondaryTitle: null };
+       case "/crm/tickets":
+        return { primaryTitle: "Experiences", secondaryTitle: null };       
       default:
         return { primaryTitle: "Page Not Found", secondaryTitle: null };
     }
@@ -812,9 +816,17 @@ const Topbar = ({ onLogout }) => {
               handleClose={() => setIsModalOpen(false)}
             />
             <Item
+              title="Experiences"
+              to="/crm/tickets"
+              icon={<WorkOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <Item
               title="Customer Manager"
               to="/crm/cm"
-              icon={<WorkOutlineOutlinedIcon />}
+              icon={<PeopleAltOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
               handleClose={() => setIsModalOpen(false)}

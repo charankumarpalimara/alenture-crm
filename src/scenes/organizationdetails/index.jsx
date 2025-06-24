@@ -153,7 +153,7 @@ const OrganizationDetails = () => {
       {/* Branches Accordion */}
       <Box mt={4} style={{ padding: "16px", backgroundColor: "#ffffff", borderRadius: "8px", height: "100%" }}>
         <Typography.Title level={5} style={{ margin: "16px 0 8px 0" }}>
-          Branches
+          Organization
         </Typography.Title>
 <Collapse
   accordion

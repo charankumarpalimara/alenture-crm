@@ -498,13 +498,13 @@ const CmForm = ({ apiUrl }) => {
             </Col>
             <Col xs={24} md={8}>
               <Form.Item
-                label={<Text strong>Branch</Text>}
+                label={<Text strong>Organization Unit</Text>}
                 name="branch"
-                rules={[{ required: true, message: "Branch is required" }]}
+                rules={[{ required: true, message: "Organization Unit is required" }]}
               >
                 <Select
                   showSearch
-                  placeholder="Select Branch"
+                  placeholder="Select Organization Unit"
                   size="large"
                   style={{ borderRadius: 8, background: "#fff", fontSize: 16 }}
                 >

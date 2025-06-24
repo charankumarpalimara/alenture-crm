@@ -12,7 +12,7 @@ import { Link, useLocation } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 // import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -28,16 +28,19 @@ const getActivePage = (pathname) => {
     return "/crm/notes";
   } else if (pathname.includes("/crm/calendar")) {
     return "/crm/calendar";
+  }else if (
+    pathname.includes("/crm/profile")
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
-    pathname.includes("/crm/profile") ||
     pathname.includes("/newExperiences") ||
     pathname.includes("/crm/pendingExperiences") ||
     pathname.includes("/crm/resolvedExperiences") ||
     pathname.includes("/crm/taskdetails")
   ) {
-    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/cmform") ||
     pathname.includes("/crm/cmdetails") ||
@@ -166,9 +169,16 @@ const Sidebar = ({ isSidebar, onLogout }) => {
           setSelected={setSelected}
         />
         <Item
+          title="Experiences"
+          to="/crm/tickets"
+          icon={<WorkOutlineOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Item
           title="Customer Manager"
           to="/crm/cm"
-          icon={<WorkOutlineOutlinedIcon />}
+          icon={<PeopleAltOutlinedIcon />}
           selected={selected}
           setSelected={setSelected}
         />

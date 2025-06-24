@@ -35,6 +35,7 @@ import CmDetails from "./scenes/cmdetails";
 import Organization from "./scenes/organization";
 import OrganizationDetails from "./scenes/organizationdetails";
 import TaskDetails from "./scenes/taskdetails";
+import Experiences from "./scenes/tickets";
 
 const queryClient = new QueryClient();
 
@@ -193,6 +194,7 @@ function App() {
                     path="/crm/resolvedExperiences"
                     element={<ResolvedExperiences />}
                   />
+                  <Route path="/crm/tickets" element={<Experiences />} />
                 </>
               )}
             </Routes>
