@@ -51,7 +51,12 @@ const getActivePage = (pathname) => {
     pathname.includes("/crm/taskdetails") ||
     pathname.includes("/crm/resolvedExperiences")
   ) {
-    return "/"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+  }
+  else if (
+    pathname.includes("/crm/")
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/cmform") ||
     pathname.includes("/crm/cmdetails") ||
@@ -191,6 +196,8 @@ const Topbar = ({ onLogout }) => {
     switch (location.pathname) {
       case "/crm":
         return "Dashboard";
+      case "/crm/":
+        return "Dashboard";
       case "/crm/cm":
         return "Customer Manager";
       case "/crm/crm":
@@ -240,6 +247,8 @@ const Topbar = ({ onLogout }) => {
   const getPageTitle1 = () => {
     switch (location.pathname) {
       case "/crm":
+        return { primaryTitle: "Dashboard", secondaryTitle: null };
+      case "/crm/":
         return { primaryTitle: "Dashboard", secondaryTitle: null };
       case "/crm/cm":
         return { primaryTitle: "Customer Manager", secondaryTitle: null };

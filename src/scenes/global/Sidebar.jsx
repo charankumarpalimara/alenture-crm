@@ -28,10 +28,6 @@ const getActivePage = (pathname) => {
     return "/crm/notes";
   } else if (pathname.includes("/crm/calendar")) {
     return "/crm/calendar";
-  }else if (
-    pathname.includes("/crm/profile")
-  ) {
-    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
@@ -58,7 +54,17 @@ const getActivePage = (pathname) => {
     pathname.includes("/crm/organizationdetails")
   ) {
     return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
-  } else {
+  }
+  else if (
+    pathname.includes("/crm/profile")
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+  }
+   else if (
+    pathname.includes("/crm/")
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+  }  else {
     return pathname;
   }
 };
