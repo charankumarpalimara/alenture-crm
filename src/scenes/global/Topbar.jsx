@@ -43,6 +43,7 @@ const getActivePage = (pathname) => {
   } else if (pathname.includes("/calendar")) {
     return "/crm/calendar";
   } else if (
+    pathname.includes("/crm/") ||
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
     pathname.includes("/crm/profile") ||
@@ -50,11 +51,6 @@ const getActivePage = (pathname) => {
     pathname.includes("/crm/pendingExperiences") ||
     pathname.includes("/crm/taskdetails") ||
     pathname.includes("/crm/resolvedExperiences")
-  ) {
-    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  else if (
-    pathname.includes("/crm/")
   ) {
     return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
