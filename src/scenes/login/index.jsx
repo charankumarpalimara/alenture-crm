@@ -158,7 +158,7 @@ const Login = ({ onLogin }) => {
                   variant="text"
                   size="small"
                   sx={{ textTransform: "none", color: "#3e4396", fontWeight: "bold" }}
-                  onClick={() => navigate("/cmr/forgot-password")}
+                  onClick={() => navigate("/crm/forgot-password")}
                 >
                   Forgot Password?
                 </Button>
