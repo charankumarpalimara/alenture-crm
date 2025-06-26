@@ -121,8 +121,7 @@ const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
       <ListItemText
         primary={title}
         sx={{
-          "& .MuiTypography-root": {
-            // Target the nested Typography component
+          "& .MuiTypography-root": { // Target the nested Typography component
             fontWeight: "bold !important", // Ensure text is bold for selected item
             fontSize: "15px",
           },

@@ -36,7 +36,7 @@ import Organization from "./scenes/organization";
 import OrganizationDetails from "./scenes/organizationdetails";
 import TaskDetails from "./scenes/taskdetails";
 import Experiences from "./scenes/tickets";
-
+import PasswordReset from "./scenes/login/passwordReset";
 const queryClient = new QueryClient();
 
 function App() {
@@ -51,6 +51,13 @@ function App() {
     setIsAuthenticated(true);
   };
   const handlelogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("crmtoken");
+    sessionStorage.removeItem("CrmDetails");
+  };
+
+
+  const handleReset = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem("crmtoken");
     sessionStorage.removeItem("CrmDetails");
@@ -149,10 +156,11 @@ function App() {
           >
             <Routes>
               {!isAuthenticated ? (
-                <Route
-                  path="*"
-                  element={<Login onLogin={handleLogin} apiUrl={apiUrl} />}
-                />
+              <>
+              
+                <Route path="*" element={<Login onLogin={handleLogin} apiUrl={apiUrl} />} />
+                  <Route path="/crm/reset-password/:crmid" element={<PasswordReset />} />
+              </>
               ) : (
                 <>
                   <Route path="/crm" element={<Dashboard />} />
