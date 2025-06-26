@@ -518,11 +518,11 @@ const CmDetails = () => {
 
             <Col xs={24} md={8}>
               <Form.Item
-                label={<Text strong>Branch Name</Text>}
+                label={<Text strong>Organization Unit</Text>}
                 name="branch"
-                rules={[{ required: true, message: "Branch name is required" }]}
+                rules={[{ required: true, message: "Organization Unit name is required" }]}
               >
-                <Input placeholder="Branch Name" disabled={true} size="large" />
+                <Input placeholder="Organization Unit" disabled={true} size="large" />
               </Form.Item>
             </Col>
 
@@ -603,7 +603,7 @@ const CmDetails = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col xs={24} md={8}>
+            <Col xs={24} md={8} style={{display:"none"}}>
               <Form.Item
                 label={<Text strong>Status</Text>}
                 name="status"

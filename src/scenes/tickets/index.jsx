@@ -21,7 +21,6 @@ import {
   // Add as AddIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { getCrmId } from "../../config";
 
 // Columns for DataGrid
 const columns = [
@@ -75,7 +74,7 @@ const columns = [
   },
 ];
 
-const ResolvedExperiences = ({ apiUrl }) => {
+const Experiences = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -92,19 +91,17 @@ const ResolvedExperiences = ({ apiUrl }) => {
   });
 
   // Fetch from API on mount
-  React.useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const response = await fetch(
-          `${
-            process.env.REACT_APP_API_URL
-          }/v1/getResolvedTicketsbyCrmid/${getCrmId()}`
-        );
-        const data = await response.json();
-        console.log("Fetched Tickets:", data);
-        if (response.ok && Array.isArray(data.updatedData)) {
-          // Map API output to DataGrid row format
-          const transformedData = data.updatedData.map((item, idx) => ({
+  const fetchTickets = async () => {
+    try {
+      const userDetails =
+        JSON.parse(sessionStorage.getItem("CrmDetails")) || {};
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/v1/getTicketsbycrmId/${userDetails.crmid}`
+      );
+      const data = await response.json();
+      if (response.ok && Array.isArray(data.updatedData)) {
+        // Map API output to DataGrid row format
+        const transformedData = data.updatedData.map((item, idx) => ({
             id: item.experienceid || idx, // DataGrid requires unique id
             experienceid: item.experienceid || "N/A",
             experience: item.experience || "N/A",
@@ -126,15 +123,34 @@ const ResolvedExperiences = ({ apiUrl }) => {
             postalcode: item.extraind6 || "N/A",
             time: item.time || "N/A",
             imageUrl: `${item.imageUrl || ""}`,
-          }));
-          setTickets(transformedData);
-          setFilteredTickets(transformedData);
-        }
-      } catch (error) {
-        console.error("Error fetching tickets:", error);
+        }));
+        setTickets(transformedData);
+        setFilteredTickets(transformedData);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    }
+  };
+
+  React.useEffect(() => {
     fetchTickets();
+  }, []);
+
+  // Live update: refetch tickets on relevant notification
+  React.useEffect(() => {
+    const WS_URL = process.env.REACT_APP_WS_URL || "ws://161.35.54.196:8080";
+    const userDetails = JSON.parse(sessionStorage.getItem("CrmDetails")) || {};
+    const ws = new window.WebSocket(WS_URL);
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "notification" && data.crmid === userDetails.crmid) {
+          // Refetch tickets for this CRM
+          fetchTickets();
+        }
+      } catch (e) {}
+    };
+    return () => ws.close();
   }, []);
 
   // Search filter
@@ -472,4 +488,4 @@ const ResolvedExperiences = ({ apiUrl }) => {
   );
 };
 
-export default ResolvedExperiences;
+export default Experiences;

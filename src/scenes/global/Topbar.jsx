@@ -51,15 +51,20 @@ const getActivePage = (pathname) => {
   } else if (pathname.includes("/calendar")) {
     return "/crm/calendar";
   } else if (
+    pathname.includes("/crm") ||
+    pathname.includes("/crm/") ||
+    pathname.includes("/crm/profile")
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+  } else if (
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
-    pathname.includes("/crm/profile") ||
     pathname.includes("/crm/newExperiences") ||
     pathname.includes("/crm/pendingExperiences") ||
     pathname.includes("/crm/taskdetails") ||
     pathname.includes("/crm/resolvedExperiences")
   ) {
-    return "/"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/cmform") ||
     pathname.includes("/crm/cmdetails") ||
@@ -254,6 +259,8 @@ const Topbar = ({ onLogout }) => {
     switch (location.pathname) {
       case "/crm":
         return "Dashboard";
+      case "/crm/":
+        return "Dashboard";
       case "/crm/cm":
         return "Customer Manager";
       case "/crm/crm":
@@ -294,6 +301,8 @@ const Topbar = ({ onLogout }) => {
         return "Notes";
       case "/crm/calendar":
         return "Calendar";
+      case "/crm/tickets":
+        return "Experiences";
       default:
         return "Page Not Found";
     }
@@ -301,6 +310,8 @@ const Topbar = ({ onLogout }) => {
   const getPageTitle1 = () => {
     switch (location.pathname) {
       case "/crm":
+        return { primaryTitle: "Dashboard", secondaryTitle: null };
+      case "/crm/":
         return { primaryTitle: "Dashboard", secondaryTitle: null };
       case "/crm/cm":
         return { primaryTitle: "Customer Manager", secondaryTitle: null };
@@ -371,6 +382,8 @@ const Topbar = ({ onLogout }) => {
         return { primaryTitle: "Notes", secondaryTitle: null };
       case "/crm/calendar":
         return { primaryTitle: "Calendar", secondaryTitle: null };
+      case "/crm/tickets":
+        return { primaryTitle: "Experiences", secondaryTitle: null };
       default:
         return { primaryTitle: "Page Not Found", secondaryTitle: null };
     }
@@ -875,9 +888,17 @@ const Topbar = ({ onLogout }) => {
               handleClose={() => setIsModalOpen(false)}
             />
             <Item
+              title="Experiences"
+              to="/crm/tickets"
+              icon={<WorkOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              handleClose={() => setIsModalOpen(false)}
+            />
+            <Item
               title="Customer Manager"
               to="/crm/cm"
-              icon={<WorkOutlineOutlinedIcon />}
+              icon={<PeopleAltOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
               handleClose={() => setIsModalOpen(false)}

@@ -374,6 +374,7 @@ const Profile = ({apiUrl}) => {
                   type="default"
                   icon={<CloseOutlined />}
                   size="large"
+                  danger
                   style={{ marginLeft: 8, fontWeight: 'bold', borderRadius: 8, }}
                   onClick={() => {
                     setIsEditing(false);
