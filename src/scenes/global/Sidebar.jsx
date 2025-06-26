@@ -26,43 +26,47 @@ import { useNavigate } from "react-router-dom";
 const getActivePage = (pathname) => {
   if (pathname.includes("/crm/notes")) {
     return "/crm/notes";
-  } else if (pathname.includes("/crm/calendar")) {
+  }
+   else if (pathname.includes("/crm/calendar")) {
     return "/crm/calendar";
-  } else if (
-    pathname.includes("/crm") ||
-    pathname.includes("/crm/") ||
-    pathname.includes("/crm/profile") 
+  }
+  else if ( 
+    pathname.includes("/crm/profile") ||
+    pathname.includes("/crm/")
   ) {
     return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   }
-  else if (
+   else if (
     pathname.includes("/crm/allExperiences") ||
-    pathname.includes("/crm/newExperiences") ||
+    pathname.includes("/crm/ticketdetails") ||
+    pathname.includes("/newExperiences") ||
     pathname.includes("/crm/pendingExperiences") ||
     pathname.includes("/crm/resolvedExperiences") ||
-    pathname.includes("/crm/ticketdetails") ||
-    pathname.includes("/crm/taskdetails") 
-
+    pathname.includes("/crm/taskdetails")
   ) {
     return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
-  } else if (
+  } 
+  else if (
     pathname.includes("/crm/cmform") ||
     pathname.includes("/crm/cmdetails") ||
     pathname.includes("/crm/cm")
   ) {
     return "/crm/cm"; // Ensure this matches the `to` prop of the Experiences Item
-  } else if (
+  }
+   else if (
     pathname.includes("/crm/tasks") ||
     pathname.includes("/crm/taskform") ||
     pathname.includes("/crm/taskdetails")
   ) {
     return "/crm/tasks"; // Ensure this matches the `to` prop of the Experiences Item
-  } else if (
+  }
+   else if (
     pathname.includes("/crm/organization") ||
     pathname.includes("/crm/organizationdetails")
   ) {
     return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
-  } else {
+  }
+   else {
     return pathname;
   }
 };
