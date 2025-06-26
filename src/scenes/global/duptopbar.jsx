@@ -170,7 +170,7 @@ const Topbar = () => {
     <MenuItemComponent title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} /> */}
           <MenuItemComponent
             title="Logout"
-            to="/logout"
+            to="/crm/logout"
             icon={<LogoutOutlinedIcon />}
             selected={selected}
             setSelected={setSelected}

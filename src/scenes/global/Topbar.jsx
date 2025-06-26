@@ -22,7 +22,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { useNavigate } from "react-router-dom";
-// import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 // import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,21 +48,21 @@ import {
 const getActivePage = (pathname) => {
   if (pathname.includes("/crm/notes")) {
     return "/crm/notes";
-  } else if (pathname.includes("/calendar")) {
+  } else if (pathname.includes("/crm/calendar")) {
     return "/crm/calendar";
   } else if (
-    pathname.includes("/crm") ||
-    pathname.includes("/crm/") ||
-    pathname.includes("/crm/profile")
+    pathname.includes("/crm/profile") ||
+    pathname === "/crm/" ||
+    pathname === "/crm"
   ) {
     return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
-    pathname.includes("/crm/newExperiences") ||
+    pathname.includes("/newExperiences") ||
     pathname.includes("/crm/pendingExperiences") ||
-    pathname.includes("/crm/taskdetails") ||
-    pathname.includes("/crm/resolvedExperiences")
+    pathname.includes("/crm/resolvedExperiences") ||
+    pathname.includes("/crm/taskdetails")
   ) {
     return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
@@ -72,26 +72,16 @@ const getActivePage = (pathname) => {
   ) {
     return "/crm/cm"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
-    pathname.includes("/crm/organization") ||
-    pathname.includes("/crm/organizationdetails")
-  ) {
-    return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
-  }
-  // else if (
-  //   pathname.includes("/tasks") ||
-  //   pathname.includes("/taskform")
-  //   // pathname.includes("/taskdetails")
-
-  // )
-  //  {
-  //   return "/tasks"; // Ensure this matches the `to` prop of the Experiences Item
-  // }
-  else if (
     pathname.includes("/crm/tasks") ||
     pathname.includes("/crm/taskform") ||
     pathname.includes("/crm/taskdetails")
   ) {
-    return "/crm/tasks"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
+  } else if (
+    pathname.includes("/crm/organization") ||
+    pathname.includes("/crm/organizationdetails")
+  ) {
+    return "/crm/organization"; // Ensure this matches the `to` prop of the Experiences Item
   } else {
     return pathname;
   }
