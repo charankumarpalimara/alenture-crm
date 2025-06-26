@@ -21,6 +21,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import { useNavigate } from "react-router-dom";
 // import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 // import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
@@ -29,12 +30,19 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 // import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+
 import logoLight from "./logo.png";
-import { useNavigate } from "react-router-dom";
+
 import Badge from "@mui/material/Badge";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { getCrmId, getCrmName } from "../../config";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getCrmNotifications,
+  getCrmNotificationsDetails,
+  markNotificationRead,
+} from "../../utils/http";
 
 // Shared getActivePage function
 const getActivePage = (pathname) => {
@@ -142,6 +150,45 @@ const Topbar = ({ onLogout }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const {
+    data: notificationList,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["crm-notifications"],
+    queryFn: () => getCrmNotifications({ crmId: getCrmId() }),
+  });
+  const { mutate: markNotificationReadMutate } = useMutation({
+    mutationFn: markNotificationRead,
+    onSuccess: (data) => {
+      console.log("updated");
+    },
+    onError: (error) => {
+      console.log("eror");
+    },
+  });
+  const { mutate, isPending: loading } = useMutation({
+    mutationFn: getCrmNotificationsDetails,
+    onSuccess: (data) => {
+      navigate("/crm/ticketdetails", { state: { ticket: data.data } });
+
+      queryClient.invalidateQueries("crm-notifications");
+    },
+    onError: (error) => {},
+  });
+
+  useEffect(() => {
+    if (!isLoading && !isError && notificationList?.data?.length > 0) {
+      const unreadNotifs = notificationList.data.filter(
+        (notif) => notif.is_read === 0
+      );
+      const totalUnread = unreadNotifs.length;
+      console.log("Total unread notifications:", totalUnread);
+      setUnreadCount(totalUnread);
+    }
+  }, [isLoading, isError, notificationList]);
 
   // WebSocket connection for live notifications
   useEffect(() => {
@@ -152,8 +199,9 @@ const Topbar = ({ onLogout }) => {
         const data = JSON.parse(event.data);
         console.log("WebSocket data:", data); // Debug incoming messages
         if (data.type === "notification" && data.crmid === getCrmId()) {
-          setNotifications((prev) => [data, ...prev]);
-          setUnreadCount((prev) => prev + 1);
+          // setNotifications((prev) => [data, ...prev]);
+          // setUnreadCount((prev) => prev + 1);
+          queryClient.invalidateQueries("crm-notifications");
           setSnackbarMsg(data.message);
           setSnackbarOpen(true);
         }
@@ -163,8 +211,23 @@ const Topbar = ({ onLogout }) => {
   }, []);
 
   const handleNotificationsClick = () => {
-    setUnreadCount(0);
+    // setUnreadCount(0);
     setDrawerOpen(true);
+  };
+  const notifClick = (data) => {
+    setDrawerOpen(false);
+    console.log(window.location.pathname);
+    if (window.location.pathname === "/crm/ticketdetails") {
+      navigate("/crm");
+    }
+    if (data.type === "experience_registration") {
+      mutate({
+        id: data.finalExperienceid,
+      });
+    }
+    markNotificationReadMutate({
+      id: data.id,
+    });
   };
 
   // Notification dropdown/modal (simple version)
@@ -886,29 +949,43 @@ const Topbar = ({ onLogout }) => {
             Notifications
           </Typography>
           <List>
-            {notifications.length === 0 && (
+            {notificationList && notificationList.data.length === 0 && (
               <ListItem>
                 <ListItemText primary="No notifications yet." />
               </ListItem>
             )}
-            {notifications.map((notif, idx) => (
-              <ListItem key={idx} divider>
-                <ListItemText
-                  primary={notif.title || "Notification"}
-                  secondary={
-                    <>
-                      <span>{notif.message}</span>
-                      <br />
-                      <span style={{ fontSize: 12, color: "#888" }}>
-                        {notif.timestamp
-                          ? new Date(notif.timestamp).toLocaleString()
-                          : ""}
-                      </span>
-                    </>
-                  }
-                />
-              </ListItem>
-            ))}
+            {notificationList &&
+              notificationList.data.map((notif, idx) => (
+                <ListItem
+                  sx={{
+                    cursor: "pointer",
+                    marginBottom: "8px",
+                    "&:hover": {
+                      backgroundColor: colors.grey[700],
+                      color: "white",
+                    },
+                  }}
+                  className=""
+                  onClick={() => notifClick(notif)}
+                  key={idx}
+                  divider
+                >
+                  <ListItemText
+                    primary={notif.title || "Notification"}
+                    secondary={
+                      <>
+                        <span>{notif.message}</span>
+                        <br />
+                        <span style={{ fontSize: 12, color: "#888" }}>
+                          {notif.timestamp
+                            ? new Date(notif.created_at).toLocaleString()
+                            : ""}
+                        </span>
+                      </>
+                    }
+                  />
+                </ListItem>
+              ))}
           </List>
         </Box>
       </Drawer>
