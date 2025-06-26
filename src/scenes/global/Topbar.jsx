@@ -43,16 +43,21 @@ const getActivePage = (pathname) => {
   } else if (pathname.includes("/calendar")) {
     return "/crm/calendar";
   } else if (
+    pathname.includes("/crm") ||
     pathname.includes("/crm/") ||
+    pathname.includes("/crm/profile") 
+  ) {
+    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+  }
+  else if (
     pathname.includes("/crm/allExperiences") ||
     pathname.includes("/crm/ticketdetails") ||
-    pathname.includes("/crm/profile") ||
     pathname.includes("/crm/newExperiences") ||
     pathname.includes("/crm/pendingExperiences") ||
     pathname.includes("/crm/taskdetails") ||
     pathname.includes("/crm/resolvedExperiences")
   ) {
-    return "/crm"; // Ensure this matches the `to` prop of the Experiences Item
+    return "/crm/tickets"; // Ensure this matches the `to` prop of the Experiences Item
   } else if (
     pathname.includes("/crm/cmform") ||
     pathname.includes("/crm/cmdetails") ||
