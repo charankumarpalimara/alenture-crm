@@ -318,22 +318,37 @@ const TicketDetails = () => {
     notes: yup.string(),
   });
 
-  const fileUrl =
-    "https://upload.wikimedia.org/wikipedia/commons/4/4d/sample.jpg";
-  const filename = "sample-file.jpg";
+const fileUrl = ticket.imageUrl || ""; // your file URL
+const filename = fileUrl.split("/").pop() || "attachment";
 
-  const handleDownload = async () => {
-    setIsDownloading(true);
-    try {
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
-      download(blob, filename);
-    } catch (error) {
-      console.error("Download failed:", error);
-    } finally {
-      setIsDownloading(false);
+const handleDownload = async (fileUrl) => {
+  if (!fileUrl) {
+    message.error("No attachment available.");
+    return;
+  }
+  setIsDownloading(true);
+  try {
+    const response = await fetch(fileUrl);
+    if (!response.ok) {
+      throw new Error("File not found or server error");
     }
-  };
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Download failed:", error);
+    message.error("Download failed. Please try again or contact support.");
+  } finally {
+    setIsDownloading(false);
+  }
+};
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -1162,14 +1177,17 @@ const TicketDetails = () => {
 
                 {/* Download Button */}
                 <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
-                    variant="contained"
-                    disabled={isDownloading}
-                    onClick={handleDownload}
-                    sx={{ minWidth: 180 }}
-                  >
-                    {isDownloading ? "Downloading..." : "Download Attachment"}
-                  </Button>
+                  {ticket.imageUrl && (
+                    <Button
+                      variant="contained"
+                        // icon={<DownloadOutlined />}
+                      disabled={isDownloading}
+                      onClick={handleDownload}
+                      sx={{ minWidth: 180 }}
+                    >
+                      {isDownloading ? "Downloading..." : "Download Attachment"}
+                    </Button>
+                )}
                 </Box>
 
                 {/* Action Buttons */}

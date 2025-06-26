@@ -98,27 +98,30 @@ const NewExperiences = ({ apiUrl }) => {
         `${process.env.REACT_APP_API_URL}/v1/getNewTicketsbyCrmid/${getCrmId()}`
       );
       const data = await response.json();
-      if (response.ok && Array.isArray(data.experienceDetails)) {
+      if (response.ok && Array.isArray(data.updatedData)) {
         // Map API output to DataGrid row format
-        const transformedData = data.experienceDetails.map((item, idx) => ({
-          id: item.id || idx,
-          experienceid: item.experienceid || "N/A",
-          subject: item.subject || "N/A",
-          priority: item.priority || "N/A",
-          status: item.status || "N/A",
-          date: item.date || "N/A",
-          updated: item.updated || "N/A",
-          organizationid: item.organizationid,
-          organizationname: item.organizationname || "N/A",
-          crmid: item.extraind1 || "N/A",
-          branch: item.branch || "N/A",
-          crmname: item.extraind2,
-          cmid: item.cmid || "N/A",
-          cmname: item.cmname || "N/A",
-          state: item.extraind4 || "N/A",
-          city: item.extraind5 || "N/A",
-          postalcode: item.extraind6 || "N/A",
-          time: item.time || "N/A",
+        const transformedData = data.updatedData.map((item, idx) => ({
+            id: item.experienceid || idx, // DataGrid requires unique id
+            experienceid: item.experienceid || "N/A",
+            experience: item.experience || "N/A",
+            experiencedetails: item.experiencedetails || "N/A",
+            impact: item.impact || "N/A",
+            subject: item.subject || "N/A",
+            priority: item.priority || "N/A",
+            status: item.status || "N/A",
+            date: item.date || "N/A",
+            updated: item.updated || "N/A",
+            organizationid: item.organizationid,
+            organizationname: item.organizationname || "N/A",
+            branch: item.branch || "N/A",
+            crmid: item.extraind1 || "N/A",
+            crmname: item.extraind2 || "N/A",
+            cmname: item.cmname || "N/A",
+            state: item.extraind4 || "N/A",
+            city: item.extraind5 || "N/A",
+            postalcode: item.extraind6 || "N/A",
+            time: item.time || "N/A",
+            imageUrl: `${item.imageUrl || ""}`,
         }));
         setTickets(transformedData);
         setFilteredTickets(transformedData);

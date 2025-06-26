@@ -242,7 +242,7 @@ const CmForm = ({ apiUrl }) => {
       setIsLoading(false);
     }
   };
-  const uniqueBranchNames = Array.from(new Set(branchNames));
+  // const uniqueBranchNames = Array.from(new Set(branchNames));
 
   const countries = Country.getAllCountries();
   const gender = ["Male", "Female"];
