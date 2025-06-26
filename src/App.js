@@ -155,7 +155,7 @@ function App() {
             }}
           >
             <Routes>
-            <Route path="/reset-password/:crmid" element={<PasswordReset />} />
+            <Route path="/crm/reset-password/:crmid" element={<PasswordReset />} />
               {!isAuthenticated ? (
               <>
 
