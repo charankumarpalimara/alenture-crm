@@ -173,6 +173,7 @@ const TicketDetails = () => {
     },
   ];
 
+
   const initialValues = {
     organizationid: ticket.organizationid || "",
     organization: ticket.organizationname || "",
@@ -187,11 +188,13 @@ const TicketDetails = () => {
     date: ticket.date || "",
     time: ticket.time || "",
     subject: ticket.subject || "",
-    requestdetails: ticket.experienceDetails || "",
+    requestdetails: ticket.experiencedetails || "",
     phoneCode: ticket.phoneCode || "",
     PhoneNo: ticket.PhoneNo || "",
     notes: ticket.notes || "",
+    impact: ticket.impact || "",
     id: ticket.experienceid || "",
+    imageUrl: ticket.imageUrl || "",
   };
 
   console.log("Ticket Details:", ticket);
@@ -255,11 +258,11 @@ const TicketDetails = () => {
   }, [ticket.experienceid, ticket.crmid, fetchTasks]);
 
   // For fetchTasks
-  useEffect(() => {
-    if (!ticket.experienceid || !ticket.crmid) return;
-    fetchTasks();
-    // Add fetchTasks as dependency
-  }, [ticket.experienceid, ticket.crmid, fetchTasks]);
+  // useEffect(() => {
+  //   if (!ticket.experienceid || !ticket.crmid) return;
+  //   fetchTasks();
+  //   // Add fetchTasks as dependency
+  // }, [ticket.experienceid, ticket.crmid, fetchTasks]);
 
   // useEffect(() => {
   //   const fetchMessages = async () => {
@@ -350,13 +353,13 @@ const handleDownload = async (fileUrl) => {
 };
 
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      console.log("Selected file:", file.name);
-    }
-  };
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setSelectedFile(file);
+  //     console.log("Selected file:", file.name);
+  //   }
+  // };
 
   const [messages, setMessages] = useState([
     { text: "Hello! How can I help you today?", sender: "support" },
@@ -1132,7 +1135,7 @@ const handleDownload = async (fileUrl) => {
                   >
                     Impact
                   </Typography>
-                  <Typography>{values.department}</Typography>
+                  <Typography>{values.impact}</Typography>
                 </Box>
 
                 <Box
