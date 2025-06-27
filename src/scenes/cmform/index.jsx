@@ -228,8 +228,8 @@ const [modalBranchNames, setModalBranchNames] = useState([]);
 
     try {
       const responce = await axios.post(
-        // `${process.env.REACT_APP_API_URL}/v1/createCm`,
-        `http://127.0.0.1:8080/v1/createCm`,
+        `${process.env.REACT_APP_API_URL}/v1/createCm`,
+        // `http://127.0.0.1:8080/v1/createCm`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -297,8 +297,8 @@ const [modalBranchNames, setModalBranchNames] = useState([]);
 
     try {
       await axios.post(
-        // `${process.env.REACT_APP_API_URL}/v1/UpdateCm`,
-            `http://127.0.0.1:8080/v1/updateCm`,
+        `${process.env.REACT_APP_API_URL}/v1/UpdateCm`,
+            // `http://127.0.0.1:8080/v1/updateCm`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
