@@ -22,6 +22,7 @@ const ForgotPassword = () => {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/v1/crmForgotPassword`,
+        // `http://127.0.0.1:8080/v1/crmForgotPassword`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
