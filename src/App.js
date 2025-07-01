@@ -4,7 +4,6 @@ import { CssBaseline, Box, useMediaQuery } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { apiUrl } from "./config";
 
 // Import Poppins font weights
 import "@fontsource/poppins/300.css";
@@ -37,6 +36,7 @@ import OrganizationDetails from "./scenes/organizationdetails";
 import TaskDetails from "./scenes/taskdetails";
 import Experiences from "./scenes/tickets";
 import PasswordReset from "./scenes/login/passwordReset";
+import ForgotPassword from "./scenes/login/forgotPassword";
 const queryClient = new QueryClient();
 
 function App() {
@@ -160,7 +160,7 @@ function App() {
               <>
 
                 <Route path="*" element={<Login onLogin={handleLogin}  />} />
-
+                <Route path='/crm/forgot-password' element={<ForgotPassword />} />
               </>
               ) : (
                 <>

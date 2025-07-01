@@ -8,48 +8,36 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Form, Input, message } from "antd";
 import Logo from "./logo.png";
+import { useNavigate } from "react-router-dom";
 
-const PasswordReset = () => {
-  const { crmid } = useParams();
+const ForgotPassword = () => {
   const [form] = Form.useForm();
+    const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const navigate = useNavigate();
-  const location = useLocation();
   const [loading, setLoading] = useState(false);
 
-  // Extract token from query params (e.g., /reset-password?token=abc)
-  const params = new URLSearchParams(location.search);
-  const token = params.get("token");
-
   const handleSubmit = async (values) => {
-    if (values.password !== values.confirmPassword) {
-      message.error("Passwords do not match");
-      return;
-    }
     setLoading(true);
     try {
       const response = await fetch(
-        // `${process.env.REACT_APP_API_URL}/v1/crmPasswordReset`,
-        `http://127.0.0.1:8080/v1/crmPasswordReset`,
+        `${process.env.REACT_APP_API_URL}/v1/crmForgotPassword`,
+        // `http://127.0.0.1:8080/v1/crmForgotPassword`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            crmid: crmid,
-            password: values.password,
-          }),
+          body: JSON.stringify({ email: values.email }),
         }
       );
       const data = await response.json();
       if (response.ok) {
-        message.success("Password reset successful! Please log in.");
-        navigate("/crm/login"); // Redirect to login
+        message.success("Password reset link sent to your email!");
+        navigate("/crm/login"); // Redirect to login page
+        form.resetFields();
       } else {
-        message.error(data.error || "Failed to reset password.");
+        message.error(data.error || "Failed to send reset link.");
       }
     } catch (error) {
       message.error("Something went wrong. Please try again later.");
@@ -101,7 +89,10 @@ const PasswordReset = () => {
               />
             </Box>
             <Typography variant="h6" mb={2} textAlign="center">
-              Reset Your Password
+              Forgot Password
+            </Typography>
+            <Typography mb={3} textAlign="center" color="text.secondary">
+              Enter your email address and we'll send you a link to reset your password.
             </Typography>
             <Form
               form={form}
@@ -110,46 +101,16 @@ const PasswordReset = () => {
               autoComplete="off"
             >
               <Form.Item
-                label="New Password"
-                name="password"
+                label="Email"
+                name="email"
                 rules={[
-                  { required: true, message: "Please enter your new password" },
-                  { min: 6, message: "Password must be at least 6 characters" },
-                ]}
-                hasFeedback
-              >
-                <Input.Password
-                  size="large"
-                  placeholder="Enter new password"
-                  style={{
-                    borderRadius: 8,
-                    fontSize: 16,
-                    padding: "10px 14px",
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Confirm Password"
-                name="confirmPassword"
-                dependencies={["password"]}
-                hasFeedback
-                rules={[
-                  { required: true, message: "Please confirm your password" },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error("Passwords do not match!")
-                      );
-                    },
-                  }),
+                  { required: true, message: "Please enter your email" },
+                  { type: "email", message: "Please enter a valid email" },
                 ]}
               >
-                <Input.Password
+                <Input
                   size="large"
-                  placeholder="Confirm new password"
+                  placeholder="Enter your email"
                   style={{
                     borderRadius: 8,
                     fontSize: 16,
@@ -176,7 +137,7 @@ const PasswordReset = () => {
                     },
                   }}
                 >
-                  {loading ? "Resetting..." : "Reset Password"}
+                  {loading ? "Sending..." : "Send Reset Link"}
                 </Button>
               </Box>
             </Form>
@@ -187,4 +148,4 @@ const PasswordReset = () => {
   );
 };
 
-export default PasswordReset;
+export default ForgotPassword;

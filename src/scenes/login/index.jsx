@@ -43,7 +43,7 @@ const Login = ({ onLogin }) => {
         onLogin();
         sessionStorage.setItem("crmtoken", data.token);
         sessionStorage.setItem("CrmDetails", JSON.stringify(data.data));
-        navigate("/crm");
+        navigate('/crm')
       } else {
         message.error(data.error || "Invalid credentials");
       }
@@ -153,6 +153,16 @@ const Login = ({ onLogin }) => {
                 }}
               />
             </Form.Item>
+              <Box textAlign="right" mb={2}>
+                <Button
+                  variant="text"
+                  size="small"
+                  sx={{ textTransform: "none", color: "#3e4396", fontWeight: "bold" }}
+                  onClick={() => navigate("/crm/forgot-password")}
+                >
+                  Forgot Password?
+                </Button>
+              </Box>
 
               <Box textAlign="center" pt={1} mb={2} pb={1}>
                 <Button
