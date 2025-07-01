@@ -8,7 +8,10 @@ import {
   Autocomplete,
   IconButton,
   Modal,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Form,
@@ -82,7 +85,7 @@ const TicketDetails = () => {
   const [deletingTaskId, setDeletingTaskId] = useState(null);
   const [completeModalVisible, setCompleteModalVisible] = useState(false);
   const [completeTaskId, setCompleteTaskId] = useState(null);
-    const [openConfirm, setOpenConfirm] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const getExperienceColor = (experience) => {
     switch (experience) {
@@ -318,37 +321,36 @@ const TicketDetails = () => {
     notes: yup.string(),
   });
 
-const fileUrl = ticket.imageUrl || ""; // your file URL
-const filename = fileUrl.split("/").pop() || "attachment";
+  const fileUrl = ticket.imageUrl || ""; // your file URL
+  const filename = fileUrl.split("/").pop() || "attachment";
 
-const handleDownload = async (fileUrl) => {
-  if (!fileUrl) {
-    message.error("No attachment available.");
-    return;
-  }
-  setIsDownloading(true);
-  try {
-    const response = await fetch(fileUrl);
-    if (!response.ok) {
-      throw new Error("File not found or server error");
+  const handleDownload = async (fileUrl) => {
+    if (!fileUrl) {
+      message.error("No attachment available.");
+      return;
     }
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Download failed:", error);
-    message.error("Download failed. Please try again or contact support.");
-  } finally {
-    setIsDownloading(false);
-  }
-};
-
+    setIsDownloading(true);
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error("File not found or server error");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      message.error("Download failed. Please try again or contact support.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -610,27 +612,26 @@ const handleDownload = async (fileUrl) => {
     setCompleteTaskId(null);
   };
 
-
-    const handleCloseExperience = async () => {
-  try {
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/v1/updateExperienceStatusToResolve`,
-      //  `http://127.0.0.1:8080/v1/updateExperienceStatusToResolve`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          experienceid: ticket.experienceid,
-          status: "Resolved",
-        }),
-      }
-    );
-    message.success("Experience status updated to Resolved!");
-    Navigate("/crm/tickets"); // Navigate to tickets page after closing
-  } catch (error) {
-    message.error("Failed to update status.");
-  }
-}
+  const handleCloseExperience = async () => {
+    try {
+      await fetch(
+        `${process.env.REACT_APP_API_URL}/v1/updateExperienceStatusToResolve`,
+        //  `http://127.0.0.1:8080/v1/updateExperienceStatusToResolve`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            experienceid: ticket.experienceid,
+            status: "Resolved",
+          }),
+        }
+      );
+      message.success("Experience status updated to Resolved!");
+      Navigate("/crm/tickets"); // Navigate to tickets page after closing
+    } catch (error) {
+      message.error("Failed to update status.");
+    }
+  };
 
   const TaskForm = ({ handleClose, fetchTasks }) => {
     const [taskForm] = Form.useForm();
@@ -1174,20 +1175,19 @@ const handleDownload = async (fileUrl) => {
                   </Typography>
                 </Box>
 
-
                 {/* Download Button */}
                 <Box sx={{ display: "flex", gap: 2 }}>
                   {ticket.imageUrl && (
                     <Button
                       variant="contained"
-                        // icon={<DownloadOutlined />}
+                      // icon={<DownloadOutlined />}
                       disabled={isDownloading}
                       onClick={handleDownload}
                       sx={{ minWidth: 180 }}
                     >
                       {isDownloading ? "Downloading..." : "Download Attachment"}
                     </Button>
-                )}
+                  )}
                 </Box>
 
                 {/* Action Buttons */}
@@ -1199,51 +1199,57 @@ const handleDownload = async (fileUrl) => {
                     mt: 1,
                   }}
                 >
-             <Button
-                variant="contained"
-                sx={{
-                  padding: "12px 24px",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  borderRadius: "8px",
-                  boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                  transition: "0.3s",
-                  backgroundColor: colors.redAccent[400],
-                  color: "#ffffff",
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: colors.redAccent[500],
-                    boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
-                  },
-                }}
-                onClick={() => setOpenConfirm(true)}
-              >
-                Close
-              </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: "12px 24px",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      borderRadius: "8px",
+                      boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                      transition: "0.3s",
+                      backgroundColor: colors.redAccent[400],
+                      color: "#ffffff",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: colors.redAccent[500],
+                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
+                      },
+                    }}
+                    onClick={() => setOpenConfirm(true)}
+                  >
+                    Close
+                  </Button>
 
-
-            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
-              <DialogTitle>Are you sure?</DialogTitle>
-              <DialogContent>
-                <Typography>Are you sure you want to close this experience?</Typography>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setOpenConfirm(false)} color="primary">
-                  Cancel
-                </Button>
-                <Button
-                  onClick={async () => {
-                    setOpenConfirm(false);
-                    await handleCloseExperience();
-                  }}
-                  color="error"
-                  variant="contained"
-                >
-                  Yes, Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-
+                  <Dialog
+                    open={openConfirm}
+                    onClose={() => setOpenConfirm(false)}
+                  >
+                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogContent>
+                      <Typography>
+                        Are you sure you want to close this experience?
+                      </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        onClick={() => setOpenConfirm(false)}
+                        color="primary"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          setOpenConfirm(false);
+                          await handleCloseExperience();
+                        }}
+                        color="error"
+                        variant="contained"
+                      >
+                        Yes, Close
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
 
                   {isEditing ? (
                     <Box sx={{ display: "flex", gap: 2 }}>
